@@ -14,7 +14,5 @@ export function getMultiple(page = 1) {
         name: item.name, price: item.price, description: item.description
     }))
 
-    return {
-        tasks
-    }
+    return tasks;
 }

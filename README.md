@@ -5,9 +5,26 @@ Käyttäjät:
     - ansaitse pisteitä
     - ostaa kaupasta asioita
 
+## 1 POC
+
+- toimii lokaalisti koneella
+
 ## TODO
 
-- superkäyttäjä joka voi lisätä palkintoja
+- sqlite taulun tekemiset + joku dummydatafile
+- env-tiedosto & conffit
+- tyypit johonkin jaettavaan interface/tyyyppi?-kansioon
+- erikseen axios-kutsut
+- refaktoroi joku yleinen db-haku funktio
+- clienttiin:
+    - pistejakelija / palkintojuttu
+        - komponentti (erikseen?) taskeille
+            - jotain actioneita: tee, kesken, tehty -> tehty tulee pisteet
+        - jos ei erikseen, niin sit ihan basic-toiminto
+    - kauppa 
+    - pistetilanne
+    . käyttäjänäkymä
+
 
 ## Palkinnot
 
@@ -21,3 +38,9 @@ Käyttäjät:
     - "äiti tulee pelaaman pleikalla"
 - pieni
     - lisäpeliaika
+
+## lisäkehitys
+
+- superkäyttäjä joka voi lisätä palkintoja
+- näkymä siihen, miten työtehtävä etenee
+- söpö kartta johonkin isoon palkintoon ヽ(✿ﾟ▽ﾟ)ノ

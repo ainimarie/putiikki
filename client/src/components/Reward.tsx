@@ -11,11 +11,18 @@ type Reward = {
   description: string
 }
 
+type Task = {
+  name: string,
+  price: number,
+  description?: string
+}
+
 interface RewardProps {
-  reward: Reward;
+  reward: Reward | Task;
 }
 
 export const Reward: React.FC<RewardProps> = ({ reward }) => {
+  console.log("reward", reward)
   return (
     <Card variant="outlined" sx={{ maxWidth: 360, margin: 2 }}>
       <CardContent>

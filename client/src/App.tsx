@@ -1,46 +1,9 @@
-import { Copyright } from "@mui/icons-material";
+import axios from 'axios';
 import { Container, Box, Typography, Link, Grid2 as Grid, AppBar, Button, Toolbar } from "@mui/material";
 import { Routes, Route, Outlet, Link as RouterLink } from "react-router";
 import { Reward } from "./components/Reward";
+import { useEffect, useState } from 'react';
 
-
-const data = [
-  {
-    name: 'Uimahalli',
-    price: 100,
-    description: 'Käydään uimahallissa viikon sisään'
-  },
-  {
-    name: 'Lisäpeliaika',
-    price: 5,
-    description: '30min lisää peliaikaa'
-  },
-  {
-    name: 'Kirppis',
-    price: 50,
-    description: 'Kirppiskäynti ja 5€ kirppisrahaa'
-  },
-  {
-    name: 'Jotain hupsua',
-    price: 5,
-    description: 'Yllätys'
-  },
-  {
-    name: 'Uimahalli',
-    price: 100,
-    description: 'Käydään uimahallissa viikon sisään'
-  },
-  {
-    name: 'Uimahalli',
-    price: 100,
-    description: 'Käydään uimahallissa viikon sisään'
-  },
-  {
-    name: 'Uimahalli',
-    price: 100,
-    description: 'Käydään uimahallissa viikon sisään'
-  },
-]
 
 export default function App() {
   return (
@@ -66,8 +29,6 @@ const routes = [{ to: '/', name: 'Koti' }, { to: '/shop', name: 'Kauppa' }, { to
 function Layout() {
   return (
     <>
-      {/* A "layout route" is a good place to put markup you want to
-          share across all the pages on your site, like navigation. */}
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
@@ -99,17 +60,43 @@ function Home() {
   );
 }
 
-function Shop() {
+
+type Task = {
+  name: string,
+  price: number,
+  description?: string
+}
+
+
+
+const Shop = () => {
+
+  const [tasks, setTasks] = useState([]);
+
+  const fetchTasks = async () => await axios.get('http://localhost:3000/tasks')
+    .then(response =>
+      setTasks(response.data)
+    )
+    .catch(error => console.log(error))
+
+  useEffect(() => {
+    fetchTasks()
+  }, [])
+
+  console.log(tasks, tasks.length)
+
   return (
     // <Box sx={{ flexGrow: 1 }} >
     <Grid container direction="row"
       sx={{
         alignItems: "stretch",
       }}>
-      {data.map((item, index) =>
-        <Grid size={4}>
+      {tasks.length > 0 && tasks.map((item: Task, index: number) => {
+        console.log("moika?")
+        return (<Grid size={4}>
           <Reward reward={item} key={`reward-${index}`} />
-        </Grid>)}
+        </Grid>)
+      })}
 
     </Grid>
     // </Box>
