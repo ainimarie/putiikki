@@ -11,6 +11,8 @@ Käyttäjät:
 
 ## TODO
 
+- miksi renderöi taskit sata kertaa, keksi joku kivempi systeemi ku ny
+
 - sqlite taulun tekemiset + joku dummydatafile
 - env-tiedosto & conffit
 - tyypit johonkin jaettavaan interface/tyyyppi?-kansioon

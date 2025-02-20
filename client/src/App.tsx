@@ -1,8 +1,7 @@
-import axios from 'axios';
-import { Container, Box, Typography, Link, Grid2 as Grid, AppBar, Button, Toolbar } from "@mui/material";
+import { Container, Box, Typography, Link, AppBar, Button, Toolbar } from "@mui/material";
 import { Routes, Route, Outlet, Link as RouterLink } from "react-router";
-import { Reward } from "./components/Reward";
-import { useEffect, useState } from 'react';
+import { Tasks } from './Tasks';
+import { Shop } from './Shop';
 
 
 export default function App() {
@@ -13,6 +12,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
+              <Route path="tasks" element={<Tasks />} />
               <Route path="shop" element={<Shop />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="*" element={<NoMatch />} />
@@ -24,7 +24,7 @@ export default function App() {
   );
 }
 
-const routes = [{ to: '/', name: 'Koti' }, { to: '/shop', name: 'Kauppa' }, { to: '/nothing', name: 'Nothing' }]
+const routes = [{ to: '/', name: 'Koti' }, { to: '/tasks', name: 'Tehtävät' }, { to: '/shop', name: 'Kauppa' }, { to: '/nothing', name: 'Nothing' }]
 
 function Layout() {
   return (
@@ -34,6 +34,7 @@ function Layout() {
           <Toolbar disableGutters>
             {routes.map(route =>
               <Button
+                key={route.name}
                 variant='outlined'
                 size='large'
                 component={RouterLink}
@@ -45,7 +46,7 @@ function Layout() {
             )}
           </Toolbar>
         </Container>
-      </AppBar>
+      </AppBar >
 
       <Outlet />
 
@@ -57,49 +58,6 @@ function Home() {
   return (
     <div>
     </div>
-  );
-}
-
-
-type Task = {
-  name: string,
-  price: number,
-  description?: string
-}
-
-
-
-const Shop = () => {
-
-  const [tasks, setTasks] = useState([]);
-
-  const fetchTasks = async () => await axios.get('http://localhost:3000/tasks')
-    .then(response =>
-      setTasks(response.data)
-    )
-    .catch(error => console.log(error))
-
-  useEffect(() => {
-    fetchTasks()
-  }, [])
-
-  console.log(tasks, tasks.length)
-
-  return (
-    // <Box sx={{ flexGrow: 1 }} >
-    <Grid container direction="row"
-      sx={{
-        alignItems: "stretch",
-      }}>
-      {tasks.length > 0 && tasks.map((item: Task, index: number) => {
-        console.log("moika?")
-        return (<Grid size={4}>
-          <Reward reward={item} key={`reward-${index}`} />
-        </Grid>)
-      })}
-
-    </Grid>
-    // </Box>
   );
 }
 
