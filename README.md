@@ -7,7 +7,9 @@ Käyttäjät:
 
 ## 1 POC
 
-- toimii lokaalisti koneella
+- no real login / signups
+- everything is locally
+- sqlite database
 
 ## TODO
 

@@ -1,23 +1,48 @@
 import { Box, Typography, Link } from "@mui/material";
-import { Routes, Route, Link as RouterLink } from "react-router";
+import { Route, Link as RouterLink, createBrowserRouter, createRoutesFromElements, useOutlet } from "react-router";
 import { Tasks } from './Tasks';
 import { Shop } from './Shop';
 import putiikkiLogo from './assets/shop.svg';
-import { Layout } from "./layout/Layout";
+import { HomeLayout } from "./layout/HomeLayout";
+import { Login } from "./auth/Login";
+import { EmptyLayout } from "./layout/EmptyLayout";
+import { AuthProvider } from "./auth/useAuth";
 
 
-export default function App() {
+
+export const AuthLayout = () => {
+  const outlet = useOutlet();
+
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
+    <AuthProvider>{outlet}</AuthProvider>
+  );
+};
+
+const getUserData = () =>
+  new Promise((resolve) =>
+    setTimeout(() => {
+      const user = window.localStorage.getItem("user");
+      resolve(user);
+    }, 3000)
+  );
+
+export const router = createBrowserRouter(createRoutesFromElements
+  (
+    <Route
+      element={<AuthLayout />}
+      loader={() => getUserData()}
+    >
+      <Route element={<EmptyLayout />} >
+        <Route path="/" element={<Login />} />
+      </Route>
+      <Route element={<HomeLayout />} >
+        <Route path='dashboard' element={<Home />} />
         <Route path="tasks" element={<Tasks />} />
         <Route path="shop" element={<Shop />} />
         <Route path="*" element={<NoMatch />} />
-      </Route>
-    </Routes>
-  );
-}
+      </Route >
+    </Route >)
+);
 
 function Home() {
   return (

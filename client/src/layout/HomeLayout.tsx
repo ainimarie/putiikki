@@ -1,15 +1,29 @@
 import { AppBar, Container, Toolbar, Box, IconButton, Menu, MenuItem, Button, Link, Typography, Tooltip, Avatar } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { useState } from "react";
-import { Outlet, Link as RouterLink } from "react-router";
+import React, { useState } from "react";
+import { Outlet, Link as RouterLink, useOutlet } from "react-router";
 import MenuIcon from '@mui/icons-material/Menu';
+import { useAuth } from "../auth/useAuth";
 
-const routes = [{ to: '/', name: 'Koti' }, { to: '/tasks', name: 'Tehtävät' }, { to: '/shop', name: 'Kauppa' }]
+
+const routes = [{ to: '/dashboard', name: 'Koti' }, { to: '/tasks', name: 'Tehtävät' }, { to: '/shop', name: 'Kauppa' }]
 
 //TODO: user-settings menu
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-export function Layout() {
+// type User = {
+//   name: string,
+//   points: number
+// }
+
+// interface Props {
+//   user: User;
+// }
+
+
+export const HomeLayout: React.FC = () => {
+
+  const user = useAuth();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -108,7 +122,7 @@ export function Layout() {
                 onClose={handleCloseUserMenu}
               >
                 <MenuItem>
-                  <Typography variant='h5' fontFamily={'Lobster Two'}>Hei Käyttäjänimi!</Typography>
+                  <Typography variant='h5' fontFamily={'Lobster Two'}>Hei {user.currentUser}!</Typography>
                 </MenuItem>
                 <MenuItem>
                   <Typography variant='body1'>Pistetilanne:</Typography>

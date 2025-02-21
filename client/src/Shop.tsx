@@ -9,8 +9,6 @@ type Reward = {
   description?: string
 }
 
-
-
 export const Shop = () => {
 
   const [rewards, setRewards] = useState([]);
@@ -26,7 +24,6 @@ export const Shop = () => {
   }, [])
 
   return (
-    // <Box sx={{ flexGrow: 1 }} >
     <Grid container direction="row"
       columns={{ xs: 1, sm: 8, md: 8 }}
       sx={{
@@ -40,6 +37,5 @@ export const Shop = () => {
       })}
 
     </Grid>
-    // </Box>
   );
 }

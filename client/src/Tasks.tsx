@@ -26,18 +26,18 @@ export const Tasks = () => {
   console.log(tasks, tasks.length)
 
   return (
-    // <Box sx={{ flexGrow: 1 }} >
     <Grid container direction="row"
+      columns={{ xs: 1, sm: 8, md: 8 }}
       sx={{
         alignItems: "stretch",
       }}>
       {tasks.length > 0 && tasks.map((item: Task, index: number) => {
-        return (<Grid size={4} key={`grid-${index}`}>
-          <Task task={item} key={`task-${index}`} />
-        </Grid>)
+        return (
+          <Grid size={{ lg: 4, md: 4, xs: 4, sm: 8 }} key={`grid-${index}`}>
+            <Task task={item} key={`task-${index}`} />
+          </Grid>)
       })}
 
     </Grid>
-    // </Box>
   );
 }

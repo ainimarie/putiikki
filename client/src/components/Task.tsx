@@ -17,7 +17,7 @@ interface TaskProps {
 export const Task: React.FC<TaskProps> = ({ task }) => {
 
   return (
-    <Card variant="outlined" sx={{ maxWidth: 360, margin: 2 }}>
+    <Card variant="outlined" sx={{ margin: 2 }}>
       <CardContent>
         <Stack
           direction="row"
