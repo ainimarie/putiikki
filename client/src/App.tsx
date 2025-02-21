@@ -1,8 +1,9 @@
-import { Container, Box, Typography, Link, AppBar, Button, Toolbar } from "@mui/material";
-import { Routes, Route, Outlet, Link as RouterLink } from "react-router";
+import { Box, Typography, Link } from "@mui/material";
+import { Routes, Route, Link as RouterLink } from "react-router";
 import { Tasks } from './Tasks';
 import { Shop } from './Shop';
 import putiikkiLogo from './assets/shop.svg';
+import { Layout } from "./layout/Layout";
 
 
 export default function App() {
@@ -18,37 +19,6 @@ export default function App() {
   );
 }
 
-const routes = [{ to: '/', name: 'Koti' }, { to: '/tasks', name: 'Tehtävät' }, { to: '/shop', name: 'Kauppa' }]
-
-function Layout() {
-  return (
-    <>
-      <AppBar variant="outlined">
-        <Container maxWidth="lg">
-          <Toolbar disableGutters>
-            {routes.map(route =>
-              <Button
-                key={route.name}
-                variant='outlined'
-                size='large'
-                component={RouterLink}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-                to={route.to}
-              >
-                {route.name}
-              </Button>
-            )}
-          </Toolbar>
-        </Container>
-      </AppBar >
-      <Toolbar />
-      <Container maxWidth="lg" sx={{ my: 4 }}>
-        <Outlet />
-      </Container>
-    </>
-  );
-}
-
 function Home() {
   return (
     <Box sx={{ textAlign: 'center', my: '20vh' }}>
@@ -59,21 +29,14 @@ function Home() {
   );
 }
 
-function Dashboard() {
-  return (
-    <div>
-      <h2>Dashboard</h2>
-    </div>
-  );
-}
-
 function NoMatch() {
   return (
-    <div>
-      <h2>Nothing to see here!</h2>
+    <Box sx={{ textAlign: 'center', my: '20vh' }}>
+      <Typography variant='h1' fontFamily='Lobster Two'>404</Typography>
+      <Typography variant='caption'>Miten päädyit tänne?</Typography>
       <p>
-        <Link component={RouterLink} to="/">Go to the home page</Link>
+        <Link component={RouterLink} to="/">Takaisin kotiin</Link>
       </p>
-    </div>
+    </Box>
   );
 }

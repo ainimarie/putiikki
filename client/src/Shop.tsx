@@ -28,12 +28,13 @@ export const Shop = () => {
   return (
     // <Box sx={{ flexGrow: 1 }} >
     <Grid container direction="row"
+      columns={{ xs: 1, sm: 8, md: 8 }}
       sx={{
         alignItems: "stretch",
       }}>
       {rewards.length > 0 && rewards.map((item: Reward, index: number) => {
         return (
-          <Grid size={4} key={`grid-${index}`}>
+          <Grid size={{ lg: 4, md: 4, xs: 4, sm: 8 }} key={`grid-${index}`}>
             <Reward reward={item} key={`reward-${index}`} />
           </Grid>)
       })}
