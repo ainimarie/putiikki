@@ -1,16 +1,16 @@
 import { query } from './db';
 
-type Task = {
+type Reward = {
     name: string,
     price: number,
     description?: string
 }
 
 export function getMultiple(page = 1) {
-    const data = query(`SELECT * FROM tasks`);
+    const data = query(`SELECT * FROM rewards`);
     const meta = { page };
 
-    const tasks: Task[] = data.map((item: Task) => ({
+    const tasks: Reward[] = data.map((item: Reward) => ({
         name: item.name, price: item.price, description: item.description
     }))
 

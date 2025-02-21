@@ -1,136 +1,67 @@
-import { Copyright } from "@mui/icons-material";
-import { Container, Box, Typography, Link, Grid2 as Grid, AppBar, Button, Toolbar } from "@mui/material";
-import { Routes, Route, Outlet, Link as RouterLink } from "react-router";
-import { Reward } from "./components/Reward";
+import { Box, Typography, Link } from "@mui/material";
+import { Route, Link as RouterLink, createBrowserRouter, createRoutesFromElements, useOutlet } from "react-router";
+import { Tasks } from './Tasks';
+import { Shop } from './Shop';
+import putiikkiLogo from './assets/shop.svg';
+import { HomeLayout } from "./layout/HomeLayout";
+import { Login } from "./auth/Login";
+import { EmptyLayout } from "./layout/EmptyLayout";
+import { AuthProvider } from "./auth/useAuth";
 
 
-const data = [
-  {
-    name: 'Uimahalli',
-    price: 100,
-    description: 'Käydään uimahallissa viikon sisään'
-  },
-  {
-    name: 'Lisäpeliaika',
-    price: 5,
-    description: '30min lisää peliaikaa'
-  },
-  {
-    name: 'Kirppis',
-    price: 50,
-    description: 'Kirppiskäynti ja 5€ kirppisrahaa'
-  },
-  {
-    name: 'Jotain hupsua',
-    price: 5,
-    description: 'Yllätys'
-  },
-  {
-    name: 'Uimahalli',
-    price: 100,
-    description: 'Käydään uimahallissa viikon sisään'
-  },
-  {
-    name: 'Uimahalli',
-    price: 100,
-    description: 'Käydään uimahallissa viikon sisään'
-  },
-  {
-    name: 'Uimahalli',
-    price: 100,
-    description: 'Käydään uimahallissa viikon sisään'
-  },
-]
 
-export default function App() {
+export const AuthLayout = () => {
+  const outlet = useOutlet();
+
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ my: 2 }}>
-        <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
-              <Route path="shop" element={<Shop />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="*" element={<NoMatch />} />
-            </Route>
-          </Routes>
-        </Typography>
-      </Box>
-    </Container>
+    <AuthProvider>{outlet}</AuthProvider>
   );
-}
+};
 
-const routes = [{ to: '/', name: 'Koti' }, { to: '/shop', name: 'Kauppa' }, { to: '/nothing', name: 'Nothing' }]
-
-function Layout() {
-  return (
-    <>
-      {/* A "layout route" is a good place to put markup you want to
-          share across all the pages on your site, like navigation. */}
-      <AppBar position="static">
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            {routes.map(route =>
-              <Button
-                variant='outlined'
-                size='large'
-                component={RouterLink}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-                to={route.to}
-              >
-                {route.name}
-              </Button>
-            )}
-          </Toolbar>
-        </Container>
-      </AppBar>
-
-      <Outlet />
-
-    </>
+const getUserData = () =>
+  new Promise((resolve) =>
+    setTimeout(() => {
+      const user = window.localStorage.getItem("user");
+      resolve(user);
+    }, 3000)
   );
-}
+
+export const router = createBrowserRouter(createRoutesFromElements
+  (
+    <Route
+      element={<AuthLayout />}
+      loader={() => getUserData()}
+    >
+      <Route element={<EmptyLayout />} >
+        <Route path="/" element={<Login />} />
+      </Route>
+      <Route element={<HomeLayout />} >
+        <Route path='dashboard' element={<Home />} />
+        <Route path="tasks" element={<Tasks />} />
+        <Route path="shop" element={<Shop />} />
+        <Route path="*" element={<NoMatch />} />
+      </Route >
+    </Route >)
+);
 
 function Home() {
   return (
-    <div>
-    </div>
-  );
-}
-
-function Shop() {
-  return (
-    // <Box sx={{ flexGrow: 1 }} >
-    <Grid container direction="row"
-      sx={{
-        alignItems: "stretch",
-      }}>
-      {data.map((item, index) =>
-        <Grid size={4}>
-          <Reward reward={item} key={`reward-${index}`} />
-        </Grid>)}
-
-    </Grid>
-    // </Box>
-  );
-}
-
-function Dashboard() {
-  return (
-    <div>
-      <h2>Dashboard</h2>
-    </div>
+    <Box sx={{ textAlign: 'center', my: '20vh' }}>
+      <img src={putiikkiLogo} style={{ maxHeight: 150 }} />
+      <Typography variant='h1' fontFamily='Lobster Two'>Putiikki</Typography>
+      <Typography variant='caption'>Pieni palkintokauppa</Typography>
+    </Box >
   );
 }
 
 function NoMatch() {
   return (
-    <div>
-      <h2>Nothing to see here!</h2>
+    <Box sx={{ textAlign: 'center', my: '20vh' }}>
+      <Typography variant='h1' fontFamily='Lobster Two'>404</Typography>
+      <Typography variant='caption'>Miten päädyit tänne?</Typography>
       <p>
-        <Link component={RouterLink} to="/">Go to the home page</Link>
+        <Link component={RouterLink} to="/">Takaisin kotiin</Link>
       </p>
-    </div>
+    </Box>
   );
 }

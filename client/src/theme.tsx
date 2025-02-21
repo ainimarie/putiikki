@@ -1,12 +1,15 @@
 import { createTheme } from '@mui/material/styles';
-import { red } from '@mui/material/colors';
+import { red, grey } from '@mui/material/colors';
 
 // A custom theme for this app
 const theme = createTheme({
     cssVariables: true,
     palette: {
+        background: {
+            default: grey.A100, //'#F9F8F8',
+        },
         primary: {
-            main: '#556cd6',
+            main: '#AA6DA3',
         },
         secondary: {
             main: '#19857b',
