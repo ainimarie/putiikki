@@ -1,4 +1,4 @@
-import { query } from './db';
+import { getMany } from './db';
 
 type Task = {
     name: string,
@@ -7,8 +7,7 @@ type Task = {
 }
 
 export function getMultiple(page = 1) {
-    const data = query(`SELECT * FROM tasks`);
-    const meta = { page };
+    const data = getMany(`SELECT * FROM tasks`);
 
     const tasks: Task[] = data.map((item: Task) => ({
         name: item.name, price: item.price, description: item.description
