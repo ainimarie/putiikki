@@ -5,6 +5,7 @@ import '@fontsource/raleway/300.css';
 import '@fontsource/raleway/400.css';
 import '@fontsource/raleway/500.css';
 import '@fontsource/raleway/700.css';
+import '@fontsource/lobster-two/400.css';
 import App from './App.tsx'
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';

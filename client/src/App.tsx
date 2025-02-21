@@ -2,35 +2,29 @@ import { Container, Box, Typography, Link, AppBar, Button, Toolbar } from "@mui/
 import { Routes, Route, Outlet, Link as RouterLink } from "react-router";
 import { Tasks } from './Tasks';
 import { Shop } from './Shop';
+import putiikkiLogo from './assets/shop.svg';
 
 
 export default function App() {
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ my: 2 }}>
-        <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
-              <Route path="tasks" element={<Tasks />} />
-              <Route path="shop" element={<Shop />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="*" element={<NoMatch />} />
-            </Route>
-          </Routes>
-        </Typography>
-      </Box>
-    </Container>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="tasks" element={<Tasks />} />
+        <Route path="shop" element={<Shop />} />
+        <Route path="*" element={<NoMatch />} />
+      </Route>
+    </Routes>
   );
 }
 
-const routes = [{ to: '/', name: 'Koti' }, { to: '/tasks', name: 'Tehtävät' }, { to: '/shop', name: 'Kauppa' }, { to: '/nothing', name: 'Nothing' }]
+const routes = [{ to: '/', name: 'Koti' }, { to: '/tasks', name: 'Tehtävät' }, { to: '/shop', name: 'Kauppa' }]
 
 function Layout() {
   return (
     <>
-      <AppBar position="static">
-        <Container maxWidth="xl">
+      <AppBar variant="outlined">
+        <Container maxWidth="lg">
           <Toolbar disableGutters>
             {routes.map(route =>
               <Button
@@ -47,17 +41,21 @@ function Layout() {
           </Toolbar>
         </Container>
       </AppBar >
-
-      <Outlet />
-
+      <Toolbar />
+      <Container maxWidth="lg" sx={{ my: 4 }}>
+        <Outlet />
+      </Container>
     </>
   );
 }
 
 function Home() {
   return (
-    <div>
-    </div>
+    <Box sx={{ textAlign: 'center', my: '20vh' }}>
+      <img src={putiikkiLogo} style={{ maxHeight: 150 }} />
+      <Typography variant='h1' fontFamily='Lobster Two'>Putiikki</Typography>
+      <Typography variant='caption'>Pieni palkintokauppa</Typography>
+    </Box >
   );
 }
 

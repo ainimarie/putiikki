@@ -1,11 +1,8 @@
-# React + TypeScript + Vite
+# Putiikki -frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+color-theme?
+https://coolors.co/a0ecd0-94ddbc-88bb92-7b886b-714955
+https://coolors.co/f9f8f8-cdd3ce-bbb5bd-aa6da3-4d2d49
 
 ## Expanding the ESLint configuration
 
