@@ -12,10 +12,10 @@ type Task = {
 
 interface TaskProps {
   task: Task;
+  handlePoints: (points: number) => void;
 }
 
-export const Task: React.FC<TaskProps> = ({ task }) => {
-
+export const Task: React.FC<TaskProps> = ({ task, handlePoints }) => {
   return (
     <Card variant="outlined" sx={{ margin: 2 }}>
       <CardContent>
@@ -35,7 +35,7 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" variant='outlined'>Tee</Button>
+        <Button size="small" variant='outlined' onClick={() => handlePoints(task.price)}>Tee</Button>
       </CardActions>
     </Card>
   );

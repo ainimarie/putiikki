@@ -18,9 +18,10 @@ type Task = {
 
 interface RewardProps {
   reward: Reward | Task;
+  handlePoints: (points: number) => void;
 }
 
-export const Reward: React.FC<RewardProps> = ({ reward }) => {
+export const Reward: React.FC<RewardProps> = ({ reward, handlePoints }) => {
   return (
     <Card variant="outlined" sx={{ margin: 2 }}>
       <CardContent>
@@ -40,7 +41,7 @@ export const Reward: React.FC<RewardProps> = ({ reward }) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" variant='outlined'>Osta</Button>
+        <Button size="small" variant='outlined' onClick={() => handlePoints(reward.price)}>Osta</Button>
       </CardActions>
     </Card>
   );
