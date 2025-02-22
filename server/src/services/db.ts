@@ -15,3 +15,7 @@ export function getOne(sql: string, params?) {
     } else
         return db.prepare(sql).get();
 }
+
+export function update(sql: string, params: any) {
+    db.prepare(sql).run(params);
+}
