@@ -1,7 +1,8 @@
+// No0t used atm, is it needed? (probably not)
 
 import { useState } from "react";
 
-export const useLocalStorage = (keyName: string, defaultValue: string | number) => {
+export const useLocalStorage = (keyName: string, defaultValue: string | number | any) => {
   const [storedValue, setStoredValue] = useState(() => {
     try {
       const value = window.localStorage.getItem(keyName);
@@ -15,6 +16,7 @@ export const useLocalStorage = (keyName: string, defaultValue: string | number) 
       return defaultValue;
     }
   });
+
   const setValue = (newValue: string | number) => {
     try {
       window.localStorage.setItem(keyName, JSON.stringify(newValue));

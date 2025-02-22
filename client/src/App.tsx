@@ -1,4 +1,4 @@
-import { Box, Typography, Link } from "@mui/material";
+import { Box, Typography, Link, Paper } from "@mui/material";
 import { Route, Link as RouterLink, createBrowserRouter, createRoutesFromElements, useOutlet } from "react-router";
 import { Tasks } from './Tasks';
 import { Shop } from './Shop';
@@ -6,7 +6,7 @@ import putiikkiLogo from './assets/shop.svg';
 import { HomeLayout } from "./layout/HomeLayout";
 import { Login } from "./auth/Login";
 import { EmptyLayout } from "./layout/EmptyLayout";
-import { AuthProvider } from "./auth/useAuth";
+import { AuthProvider, useAuth } from "./auth/useAuth";
 
 
 
@@ -18,19 +18,11 @@ export const AuthLayout = () => {
   );
 };
 
-const getUserData = () =>
-  new Promise((resolve) =>
-    setTimeout(() => {
-      const user = window.localStorage.getItem("user");
-      resolve(user);
-    }, 3000)
-  );
-
+// TODO: Check the autlayout logic? maybe some strange lagging
 export const router = createBrowserRouter(createRoutesFromElements
   (
     <Route
       element={<AuthLayout />}
-      loader={() => getUserData()}
     >
       <Route element={<EmptyLayout />} >
         <Route path="/" element={<Login />} />
@@ -41,15 +33,20 @@ export const router = createBrowserRouter(createRoutesFromElements
         <Route path="shop" element={<Shop />} />
         <Route path="*" element={<NoMatch />} />
       </Route >
-    </Route >)
+    </Route >
+  )
 );
 
 function Home() {
+  const { currentUser } = useAuth();
   return (
     <Box sx={{ textAlign: 'center', my: '20vh' }}>
-      <img src={putiikkiLogo} style={{ maxHeight: 150 }} />
-      <Typography variant='h1' fontFamily='Lobster Two'>Putiikki</Typography>
-      <Typography variant='caption'>Pieni palkintokauppa</Typography>
+      {/* <img src={putiikkiLogo} style={{ maxHeight: 150 }} /> */}
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Typography fontSize={30} mr={2} sx={{ alignSelf: 'flex-end' }}>Hei</Typography>
+        <Typography variant='h3' fontFamily='Lobster Two'>{currentUser.name}</Typography>
+        <Typography fontSize={30} ml={2} sx={{ alignSelf: 'flex-end' }}>(∩^o^)⊃━☆</Typography>
+      </Box>
     </Box >
   );
 }

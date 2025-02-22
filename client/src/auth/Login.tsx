@@ -21,6 +21,7 @@ export const Login: React.FC<LoginProps> = () => {
   const [username, setUsername] = useState<string>('');
 
 
+  // Add loading logic and cute graphic
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     login(username);

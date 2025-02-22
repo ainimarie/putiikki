@@ -1,15 +1,19 @@
-
-import { createContext, ReactNode, useContext, useMemo } from "react";
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
-import { useLocalStorage } from "./useLocalStorage";
+import axios from "axios";
+
+type User = {
+  name: string,
+  points: number
+}
 
 type Props = {
   children?: ReactNode;
 }
 
-
 interface ProvideAuthContext {
-  currentUser: string | null,
+  currentUser: User | null,
+  setCurrentUser: Dispatch<SetStateAction<User | null>>,
   login: (name: string) => void,
   logout: () => void
 }
@@ -17,28 +21,38 @@ interface ProvideAuthContext {
 const AuthContext = createContext<ProvideAuthContext | null>(null);
 
 export const AuthProvider = ({ children }: Props) => {
-  const [user, setUser] = useLocalStorage('user', '');
+
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
   const navigate = useNavigate();
 
-  // call this function when you want to authenticate the user
   const login = async (user: string) => {
-    setUser(user);
-    navigate("/dashboard");
+    await axios.get(`http://localhost:3000/users/${user}`)
+      .then(response => {
+        console.log(response.data)
+        if (response.data !== undefined || response.data.length > 0) {
+          setCurrentUser(response.data)
+          navigate("/dashboard");
+        }
+      }
+      )
+      .catch(error => console.log(error))
   };
 
   // call this function to sign out logged in user
   const logout = () => {
-    setUser(null);
+    setCurrentUser(null);
     navigate("/", { replace: true });
   };
 
   const value = useMemo(
     () => ({
-      currentUser: user,
+      currentUser,
+      setCurrentUser,
       login,
       logout,
     }),
-    [user]
+    [currentUser]
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

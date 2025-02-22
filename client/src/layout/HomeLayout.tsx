@@ -1,29 +1,21 @@
 import { AppBar, Container, Toolbar, Box, IconButton, Menu, MenuItem, Button, Link, Typography, Tooltip, Avatar } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import React, { useState } from "react";
-import { Outlet, Link as RouterLink, useOutlet } from "react-router";
+import { Navigate, Outlet, Link as RouterLink } from "react-router";
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from "../auth/useAuth";
 
 
 const routes = [{ to: '/dashboard', name: 'Koti' }, { to: '/tasks', name: 'Tehtävät' }, { to: '/shop', name: 'Kauppa' }]
 
-//TODO: user-settings menu
-// const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
-// type User = {
-//   name: string,
-//   points: number
-// }
-
-// interface Props {
-//   user: User;
-// }
-
-
 export const HomeLayout: React.FC = () => {
 
-  const user = useAuth();
+  const { currentUser, logout } = useAuth();
+
+  if (!currentUser) {
+    return <Navigate to="/" />;
+  }
+
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -41,8 +33,16 @@ export const HomeLayout: React.FC = () => {
     setAnchorElUser(null);
   };
 
+  const handleLogout = () => {
+    logout();
+  }
+
+  const currentPoints = currentUser.points ? currentUser.points : '0';
+
+
   return (
     <>
+      {/* move navigation to own component */}
       <AppBar variant="outlined">
         <Container maxWidth="lg">
           <Toolbar disableGutters>
@@ -98,7 +98,17 @@ export const HomeLayout: React.FC = () => {
             </Box>
 
             <Box sx={{ flexGrow: 0, display: 'flex' }}>
-              <Typography variant='body1' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, mr: 2, alignSelf: 'center' }} > 50 pistettä</Typography>
+              <Typography
+                variant='body1'
+                sx={{
+                  flexGrow: 1,
+                  display: { xs: 'none', md: 'flex' },
+                  mr: 2,
+                  alignSelf: 'center'
+                }}
+              >
+                {currentPoints} pistettä
+              </Typography>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="user" src="/public/potted-plant.png" sx={{ bgcolor: grey.A100 }} />
@@ -122,16 +132,14 @@ export const HomeLayout: React.FC = () => {
                 onClose={handleCloseUserMenu}
               >
                 <MenuItem>
-                  <Typography variant='h5' fontFamily={'Lobster Two'}>Hei {user.currentUser}!</Typography>
+                  <Typography variant='h5' fontFamily={'Lobster Two'}>Hei {currentUser.name}!</Typography>
                 </MenuItem>
                 <MenuItem>
-                  <Typography variant='body1'>Pistetilanne:</Typography>
+                  <Typography variant='body1'>Pistetilanne: {currentPoints}</Typography>
                 </MenuItem>
-                {/* {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
-                  </MenuItem>
-                ))} */}
+                <MenuItem>
+                  <Button onClick={handleLogout}>Poistu</Button>
+                </MenuItem>
               </Menu>
             </Box>
           </Toolbar>
