@@ -16,10 +16,15 @@ export const Tasks = () => {
 
   const [tasks, setTasks] = useState([]);
 
-  const doTask = (rewardPoints: number) => {
-    if (currentUser !== null)
-      // Update database
-      setCurrentUser({ ...currentUser, points: currentUser.points + rewardPoints });
+  const doTask = async (rewardPoints: number) => {
+    if (currentUser !== null) {      // Update databas
+      await axios.post('http://localhost:3000/transactions', { user: currentUser.name, points: rewardPoints })
+        .then(response => {
+          if (response.data === 'ok')
+            setCurrentUser({ ...currentUser, points: currentUser.points + rewardPoints });
+        })
+        .catch(error => console.log(error));
+    }
   }
 
   const fetchTasks = async () => await axios.get('http://localhost:3000/tasks')

@@ -5,7 +5,7 @@ export const router = express.Router();
 
 const userSchema = z.object({
   user: z.string(),
-  points: z.number()
+  points: z.number().nullable()
 });
 
 router.post('/', function (req, res, next) {
