@@ -1,49 +1,14 @@
-# putiikki
-Pistekauppa
+# putiikki 🛒
 
-Käyttäjät:
-    - ansaitse pisteitä
-    - ostaa kaupasta asioita
+A small app for getting points from tasks and earning rewards. Made for my tornado-twins ♥
 
-## 1 POC
+## First version, PoC
 
-- no real login / signups
-- everything is locally
-- sqlite database
+- made for local environment, no real authentication
+- doesn't include real logins or signups
+- SQLite for database
 
-## TODO
-
-- miksi renderöi taskit sata kertaa, keksi joku kivempi systeemi ku ny
-
-- sqlite taulun tekemiset + joku dummydatafile
-- env-tiedosto & conffit
-- tyypit johonkin jaettavaan interface/tyyyppi?-kansioon
-- erikseen axios-kutsut
-- refaktoroi joku yleinen db-haku funktio
-- clienttiin:
-    - pistejakelija / palkintojuttu
-        - komponentti (erikseen?) taskeille
-            - jotain actioneita: tee, kesken, tehty -> tehty tulee pisteet
-        - jos ei erikseen, niin sit ihan basic-toiminto
-    - kauppa 
-    - pistetilanne
-    . käyttäjänäkymä
-
-
-## Palkinnot
-
-- megaiso ~100 pistettä
-    - saa ostaa 20e kaupasta jotain
-- isot
-    - uimahalli-käynti
-    - kirppiskäynti (5euroa käyttöä)
-- medium
-    - koneella pelaaminen
-    - "äiti tulee pelaaman pleikalla"
-- pieni
-    - lisäpeliaika
-
-## lisäkehitys
+### lisäkehitys suomeksi
 
 - superkäyttäjä joka voi lisätä palkintoja
 - näkymä siihen, miten työtehtävä etenee
