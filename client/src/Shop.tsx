@@ -17,10 +17,15 @@ export const Shop = () => {
   const { currentUser, setCurrentUser } = useAuth();
 
 
-  const buyReward = (rewardPoints: number) => {
-    if (currentUser !== null)
-      // Update database
-      setCurrentUser({ ...currentUser, points: currentUser.points - rewardPoints });
+  const buyReward = async (rewardPoints: number) => {
+    if (currentUser !== null) {      // Update databas
+      await axios.post('http://localhost:3000/transactions', { user: currentUser.name, points: -rewardPoints })
+        .then(response => {
+          if (response.data === 'ok')
+            setCurrentUser({ ...currentUser, points: currentUser.points - rewardPoints });
+        })
+        .catch(error => console.log(error));
+    }
   }
 
 
@@ -29,6 +34,12 @@ export const Shop = () => {
       setRewards(response.data)
     )
     .catch(error => console.log(error))
+
+  // const updatePoints = async () => await axios.post('http://localhost:3000/transactions', { name: currentUser.name, points: currentUser.points })
+  //   .then(response =>
+  //     setRewards(response.data)
+  //   )
+  //   .catch(error => console.log(error))
 
   useEffect(() => {
     fetchRewards()
