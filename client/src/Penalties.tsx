@@ -45,7 +45,13 @@ export const Penalties = () => {
       {penalties.length > 0 && penalties.map((penalty: Item, index: number) => {
         return (
           <Grid size={{ lg: 4, md: 4, xs: 4, sm: 8 }} key={`grid-${index}`}>
-            <Item item={penalty} key={`reward-${index}`} handlePoints={(points: number) => getPenalty(points)} />
+            <Item
+              item={penalty}
+              key={`reward-${index}`}
+              handlePoints={(points: number) => getPenalty(points)}
+              buttonTitle='Vähennä'
+              isPenalty
+            />
           </Grid>
         )
       })}

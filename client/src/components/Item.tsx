@@ -7,15 +7,17 @@ import { Button, CardActions, CardContent } from '@mui/material';
 type Item = {
   name: string,
   price: number,
-  description?: string
+  description?: string,
 }
 
 interface ItemProps {
   item: Item;
   handlePoints: (points: number) => void;
+  buttonTitle: string;
+  isPenalty?: boolean;
 }
 
-export const Item: React.FC<ItemProps> = ({ item, handlePoints }) => {
+export const Item: React.FC<ItemProps> = ({ item, handlePoints, buttonTitle, isPenalty }) => {
   return (
     <Card variant="outlined" sx={{ margin: 2 }}>
       <CardContent sx={{ minHeight: '92px' }}>
@@ -27,6 +29,7 @@ export const Item: React.FC<ItemProps> = ({ item, handlePoints }) => {
             {item.name}
           </Typography>
           <Typography gutterBottom variant="h6" component="div">
+            {isPenalty && "-"}
             {item.price} p.
           </Typography>
         </Stack>
@@ -35,7 +38,7 @@ export const Item: React.FC<ItemProps> = ({ item, handlePoints }) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" variant='outlined' onClick={() => handlePoints(item.price)}>Tee</Button>
+        <Button size="small" variant='outlined' onClick={() => handlePoints(item.price)}>{buttonTitle}</Button>
       </CardActions>
     </Card >
   );

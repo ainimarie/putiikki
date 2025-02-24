@@ -89,20 +89,21 @@ export const HomeLayout: React.FC = () => {
                 onClose={handleCloseNavMenu}
                 sx={{ display: { xs: 'block', md: 'none' } }}
               >
-                {routes.map((route) => (
-                  <MenuItem key={route.name} onClick={handleCloseNavMenu} >
-                    <Link sx={{ textAlign: 'center' }} component={RouterLink} to={route.to}>{route.name}</Link>
+                {routes.map((route, index) => (
+                  <MenuItem key={`menuitem-${index}`} onClick={handleCloseNavMenu} >
+                    <Link key={`menu-nav-${index}`} sx={{ textAlign: 'center' }} component={RouterLink} to={route.to}>{route.name}</Link>
                   </MenuItem>
                 ))}
               </Menu>
             </Box>
 
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {routes.map(route => {
+              {routes.map((route, index) => {
                 if (route.to === '/add') {
                   return (
-                    <>
+                    <div key={`nav-${index}`}>
                       <Button
+                        key={`nav-${index}`}
                         variant='outlined'
                         size='large'
                         sx={{ my: 2, color: 'white', display: 'block' }}
@@ -113,14 +114,14 @@ export const HomeLayout: React.FC = () => {
                         open={dialogOpen}
                         onClose={handleCloseNew}
                       >
-                        <DialogTitle>Lisää uusi</DialogTitle>
+                        <DialogTitle >Lisää uusi</DialogTitle>
                         <AddItem isDialog close={handleCloseNew} />
                       </Dialog >
-                    </>)
+                    </div>)
                 }
                 else {
                   return (<Button
-                    key={route.name}
+                    key={`nav-${index}`}
                     variant='outlined'
                     size='large'
                     component={RouterLink}

@@ -48,7 +48,12 @@ export const Shop = () => {
         {rewards.length > 0 && rewards.map((reward: Item, index: number) => {
           return (
             <Grid size={{ lg: 4, md: 4, xs: 4, sm: 8 }} key={`grid-${index}`}>
-              <Item item={reward} key={`reward-${index}`} handlePoints={(points: number) => buyReward(points)} />
+              <Item
+                item={reward}
+                key={`reward-${index}`}
+                handlePoints={(points: number) => buyReward(points)}
+                buttonTitle='Osta'
+              />
             </Grid>
           )
         })}
