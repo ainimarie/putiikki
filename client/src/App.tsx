@@ -8,6 +8,7 @@ import { Login } from "./auth/Login";
 import { EmptyLayout } from "./layout/EmptyLayout";
 import { AuthProvider, useAuth } from "./auth/useAuth";
 import { Penalties } from "./Penalties";
+import { AddItem } from "./components/AddItem";
 
 
 
@@ -33,6 +34,7 @@ export const router = createBrowserRouter(createRoutesFromElements
         <Route path="tasks" element={<Tasks />} />
         <Route path="penalties" element={<Penalties />} />
         <Route path="shop" element={<Shop />} />
+        <Route path="add" element={<AddItem />} />
         <Route path="*" element={<NoMatch />} />
       </Route >
     </Route >

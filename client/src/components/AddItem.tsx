@@ -116,7 +116,7 @@ export const AddItem: React.FC<Props> = ({ isDialog, close }) => {
         />
       </CardContent>
       <CardActions>
-        <FormControlLabel control={<Switch checked={addMany} onChange={handleSwitchChange} />} label="Lisää monta" />
+        {isDialog && <FormControlLabel control={<Switch checked={addMany} onChange={handleSwitchChange} />} label="Lisää monta" />}
         <Button size="small" variant='outlined' onClick={handleSubmit}>Lisää {TYPE[inputs.type]}</Button>
       </CardActions>
     </Paper >

@@ -1,4 +1,4 @@
-import { getMany } from './db';
+import { getMany, update } from './db';
 
 type Reward = {
     name: string,
@@ -15,3 +15,10 @@ export function getMultiple(page = 1) {
 
     return tasks;
 }
+
+export function addReward(reward: Reward) {
+    const sql = `INSERT INTO rewards (name, price, description) VALUES (?, ?, ?)`;
+
+    update(sql, [reward.name, reward.price, reward.description]);
+}
+
