@@ -5,7 +5,18 @@ import { z } from 'zod';
 
 const penaltySchema = z.object({
     name: z.string(),
-    price: z.number(),
+    price: z.string().transform((val, ctx) => {
+        const parsed = parseInt(val);
+        if (isNaN(parsed)) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Not a number",
+            });
+
+            return z.NEVER;
+        }
+        return parsed;
+    }),
     description: z.string().nullable()
 });
 
