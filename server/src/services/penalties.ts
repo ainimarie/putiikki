@@ -1,4 +1,4 @@
-import { getMany } from './db';
+import { getMany, update } from './db';
 
 type Penalty = {
     name: string,
@@ -14,4 +14,10 @@ export function getMultiple() {
     }))
 
     return tasks;
+}
+
+export function addPenalty(penalty: Penalty) {
+    const sql = `INSERT INTO penalties (name, price, description) VALUES (?, ?, ?)`;
+
+    update(sql, [penalty.name, penalty.price, penalty.description]);
 }

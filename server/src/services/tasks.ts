@@ -1,4 +1,4 @@
-import { getMany } from './db';
+import { getMany, update } from './db';
 
 type Task = {
     name: string,
@@ -14,4 +14,10 @@ export function getMultiple(page = 1) {
     }))
 
     return tasks;
+}
+
+export function addTask(task: Task) {
+    const sql = `INSERT INTO tasks (name, price, description) VALUES (?, ?, ?)`;
+
+    update(sql, [task.name, task.price, task.description]);
 }

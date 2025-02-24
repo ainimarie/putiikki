@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Item } from "./components/Item";
 import { useAuth } from "./auth/useAuth";
+import { AddItem } from "./components/AddItem";
 
 type Item = {
   name: string,
@@ -37,18 +38,21 @@ export const Shop = () => {
   }, [])
 
   return (
-    <Grid container direction="row"
-      columns={{ xs: 1, sm: 8, md: 8 }}
-      sx={{
-        alignItems: "stretch",
-      }}>
-      {rewards.length > 0 && rewards.map((reward: Item, index: number) => {
-        return (
-          <Grid size={{ lg: 4, md: 4, xs: 4, sm: 8 }} key={`grid-${index}`}>
-            <Item item={reward} key={`reward-${index}`} handlePoints={(points: number) => buyReward(points)} />
-          </Grid>
-        )
-      })}
-    </Grid>
+    <>
+      <Grid container direction="row"
+        columns={{ xs: 1, sm: 8, md: 8 }}
+        sx={{
+          alignItems: "stretch",
+        }}>
+
+        {rewards.length > 0 && rewards.map((reward: Item, index: number) => {
+          return (
+            <Grid size={{ lg: 4, md: 4, xs: 4, sm: 8 }} key={`grid-${index}`}>
+              <Item item={reward} key={`reward-${index}`} handlePoints={(points: number) => buyReward(points)} />
+            </Grid>
+          )
+        })}
+      </Grid>
+    </>
   );
 }

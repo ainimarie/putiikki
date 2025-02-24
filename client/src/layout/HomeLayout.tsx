@@ -1,12 +1,19 @@
-import { AppBar, Container, Toolbar, Box, IconButton, Menu, MenuItem, Button, Link, Typography, Tooltip, Avatar } from "@mui/material";
+import { AppBar, Container, Toolbar, Box, IconButton, Menu, MenuItem, Button, Link, Typography, Tooltip, Avatar, Dialog, DialogTitle } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import React, { useState } from "react";
 import { Navigate, Outlet, Link as RouterLink } from "react-router";
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from "../auth/useAuth";
+import { AddItem } from "../components/AddItem";
 
 
-const routes = [{ to: '/dashboard', name: 'Koti' }, { to: '/tasks', name: 'Tehtävät' }, { to: '/penalties', name: 'Rangaistukset' }, { to: '/shop', name: 'Kauppa' }]
+const routes = [
+  { to: '/dashboard', name: 'Koti' },
+  { to: '/tasks', name: 'Tehtävät' },
+  { to: '/penalties', name: 'Rangaistukset' },
+  { to: '/shop', name: 'Kauppa' },
+  { to: '/add', name: 'Lisää uusi' }
+]
 
 export const HomeLayout: React.FC = () => {
 
@@ -18,6 +25,14 @@ export const HomeLayout: React.FC = () => {
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+
+  const handleOpenNew = () => {
+    setDialogOpen(true);
+  };
+  const handleCloseNew = () => {
+    setDialogOpen(false);
+  };
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -83,18 +98,39 @@ export const HomeLayout: React.FC = () => {
             </Box>
 
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {routes.map(route =>
-                <Button
-                  key={route.name}
-                  variant='outlined'
-                  size='large'
-                  component={RouterLink}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                  to={route.to}
-                >
-                  {route.name}
-                </Button>
-              )}
+              {routes.map(route => {
+                if (route.to === '/add') {
+                  return (
+                    <>
+                      <Button
+                        variant='outlined'
+                        size='large'
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        onClick={handleOpenNew}>
+                        Lisää
+                      </Button>
+                      <Dialog
+                        open={dialogOpen}
+                        onClose={handleCloseNew}
+                      >
+                        <DialogTitle>Lisää uusi</DialogTitle>
+                        <AddItem isDialog close={handleCloseNew} />
+                      </Dialog >
+                    </>)
+                }
+                else {
+                  return (<Button
+                    key={route.name}
+                    variant='outlined'
+                    size='large'
+                    component={RouterLink}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                    to={route.to}
+                  >
+                    {route.name}
+                  </Button>)
+                }
+              })}
             </Box>
 
             <Box sx={{ flexGrow: 0, display: 'flex' }}>
