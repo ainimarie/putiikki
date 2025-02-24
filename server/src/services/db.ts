@@ -1,6 +1,6 @@
 import sqlite from 'better-sqlite3';
 import path from 'path';
-const db = new sqlite(path.resolve('putiikki.db'), { fileMustExist: true });
+const db = new sqlite(path.resolve('putiikki_test.db'), { fileMustExist: true });
 
 export function getMany(sql: string, params?) {
     if (params) {

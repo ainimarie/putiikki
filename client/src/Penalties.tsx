@@ -10,30 +10,30 @@ type Item = {
   description?: string
 }
 
-export const Tasks = () => {
+export const Penalties = () => {
 
+  const [penalties, setPenalties] = useState([]);
   const { currentUser, setCurrentUser } = useAuth();
-  const [tasks, setTasks] = useState([]);
 
-  const doTask = async (rewardPoints: number) => {
+  const getPenalty = async (penaltyPoints: number) => {
     if (currentUser !== null) {
-      await axios.post('http://localhost:3000/transactions', { user: currentUser.name, points: rewardPoints })
+      await axios.post('http://localhost:3000/transactions', { user: currentUser.name, points: -penaltyPoints })
         .then(response => {
           if (response.data === 'ok')
-            setCurrentUser({ ...currentUser, points: currentUser.points + rewardPoints });
+            setCurrentUser({ ...currentUser, points: currentUser.points - penaltyPoints });
         })
         .catch(error => console.log(error));
     }
   }
 
-  const fetchTasks = async () => await axios.get('http://localhost:3000/tasks')
+  const fetchPenalties = async () => await axios.get('http://localhost:3000/penalties')
     .then(response =>
-      setTasks(response.data)
+      setPenalties(response.data)
     )
     .catch(error => console.log(error))
 
   useEffect(() => {
-    fetchTasks()
+    fetchPenalties()
   }, [])
 
   return (
@@ -42,10 +42,10 @@ export const Tasks = () => {
       sx={{
         alignItems: "stretch",
       }}>
-      {tasks.length > 0 && tasks.map((task: Item, index: number) => {
+      {penalties.length > 0 && penalties.map((penalty: Item, index: number) => {
         return (
           <Grid size={{ lg: 4, md: 4, xs: 4, sm: 8 }} key={`grid-${index}`}>
-            <Item item={task} key={`task-${index}`} handlePoints={(points: number) => doTask(points)} />
+            <Item item={penalty} key={`reward-${index}`} handlePoints={(points: number) => getPenalty(points)} />
           </Grid>
         )
       })}

@@ -1,10 +1,10 @@
 import { Grid2 as Grid } from "@mui/material";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Reward } from "./components/Reward";
+import { Item } from "./components/Item";
 import { useAuth } from "./auth/useAuth";
 
-type Reward = {
+type Item = {
   name: string,
   price: number,
   description?: string
@@ -13,12 +13,10 @@ type Reward = {
 export const Shop = () => {
 
   const [rewards, setRewards] = useState([]);
-
   const { currentUser, setCurrentUser } = useAuth();
 
-
   const buyReward = async (rewardPoints: number) => {
-    if (currentUser !== null) {      // Update databas
+    if (currentUser !== null) {
       await axios.post('http://localhost:3000/transactions', { user: currentUser.name, points: -rewardPoints })
         .then(response => {
           if (response.data === 'ok')
@@ -28,18 +26,11 @@ export const Shop = () => {
     }
   }
 
-
   const fetchRewards = async () => await axios.get('http://localhost:3000/rewards')
     .then(response =>
       setRewards(response.data)
     )
     .catch(error => console.log(error))
-
-  // const updatePoints = async () => await axios.post('http://localhost:3000/transactions', { name: currentUser.name, points: currentUser.points })
-  //   .then(response =>
-  //     setRewards(response.data)
-  //   )
-  //   .catch(error => console.log(error))
 
   useEffect(() => {
     fetchRewards()
@@ -51,13 +42,13 @@ export const Shop = () => {
       sx={{
         alignItems: "stretch",
       }}>
-      {rewards.length > 0 && rewards.map((item: Reward, index: number) => {
+      {rewards.length > 0 && rewards.map((reward: Item, index: number) => {
         return (
           <Grid size={{ lg: 4, md: 4, xs: 4, sm: 8 }} key={`grid-${index}`}>
-            <Reward reward={item} key={`reward-${index}`} handlePoints={(points: number) => buyReward(points)} />
-          </Grid>)
+            <Item item={reward} key={`reward-${index}`} handlePoints={(points: number) => buyReward(points)} />
+          </Grid>
+        )
       })}
-
     </Grid>
   );
 }
