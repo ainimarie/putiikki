@@ -1,4 +1,4 @@
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import ForwardIcon from '@mui/icons-material/Forward';
 import { useNavigate } from "react-router";
@@ -30,19 +30,23 @@ export const Login: React.FC<LoginProps> = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ my: 4, justifyContent: 'center' }}>
-      <Box
+    <Container maxWidth="sm" sx={{ my: 4, justifyContent: 'center', alignContent: 'center' }}>
+      <Stack
         component="form"
         onSubmit={handleSubmit}
         sx={{ '& > :not(style)': { m: 1 }, display: 'flex' }}
         noValidate
         autoComplete="off"
       >
-        <Typography variant='h5' sx={{ alignSelf: 'center' }}>Moikka</Typography>
-        <TextField id="outlined-basic" label="nimesi" variant="outlined" onChange={(e) => setUsername(e.target.value)} value={username} />
-        <Typography variant='h5' sx={{ alignSelf: 'center' }}>!</Typography>
-        <Button variant='contained' type='submit' endIcon={<ForwardIcon />}>Mennään</Button>
-      </Box >
-    </Container>
+        <Stack direction='row' spacing={1} sx={{ justifyContent: 'center' }}>
+          <Typography variant='h5' sx={{ alignSelf: 'center' }}>Moikka</Typography>
+          <TextField id="outlined-basic" label="nimesi" variant="outlined" onChange={(e) => setUsername(e.target.value)} value={username} />
+          <Typography variant='h5' sx={{ alignSelf: 'center' }}>!</Typography>
+        </Stack>
+        <Button variant='contained' type='submit' endIcon={<ForwardIcon />} sx={{ maxWidth: { sm: '150px' }, alignSelf: 'center' }} fullWidth >
+          Mennään
+        </Button>
+      </Stack >
+    </Container >
   )
 }
