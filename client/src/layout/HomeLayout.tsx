@@ -6,7 +6,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from "../auth/useAuth";
 
 
-const routes = [{ to: '/dashboard', name: 'Koti' }, { to: '/tasks', name: 'Tehtävät' }, { to: '/shop', name: 'Kauppa' }]
+const routes = [{ to: '/dashboard', name: 'Koti' }, { to: '/tasks', name: 'Tehtävät' }, { to: '/penalties', name: 'Rangaistukset' }, { to: '/shop', name: 'Kauppa' }]
 
 export const HomeLayout: React.FC = () => {
 

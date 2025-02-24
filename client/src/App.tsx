@@ -1,4 +1,4 @@
-import { Box, Typography, Link, Paper } from "@mui/material";
+import { Box, Typography, Link } from "@mui/material";
 import { Route, Link as RouterLink, createBrowserRouter, createRoutesFromElements, useOutlet } from "react-router";
 import { Tasks } from './Tasks';
 import { Shop } from './Shop';
@@ -7,6 +7,7 @@ import { HomeLayout } from "./layout/HomeLayout";
 import { Login } from "./auth/Login";
 import { EmptyLayout } from "./layout/EmptyLayout";
 import { AuthProvider, useAuth } from "./auth/useAuth";
+import { Penalties } from "./Penalties";
 
 
 
@@ -18,7 +19,7 @@ export const AuthLayout = () => {
   );
 };
 
-// TODO: Check the autlayout logic? maybe some strange lagging
+// TODO: Check the authlayout logic, move routes to own folder
 export const router = createBrowserRouter(createRoutesFromElements
   (
     <Route
@@ -30,6 +31,7 @@ export const router = createBrowserRouter(createRoutesFromElements
       <Route element={<HomeLayout />} >
         <Route path='dashboard' element={<Home />} />
         <Route path="tasks" element={<Tasks />} />
+        <Route path="penalties" element={<Penalties />} />
         <Route path="shop" element={<Shop />} />
         <Route path="*" element={<NoMatch />} />
       </Route >
@@ -41,7 +43,7 @@ function Home() {
   const { currentUser } = useAuth();
   return (
     <Box sx={{ textAlign: 'center', my: '20vh' }}>
-      {/* <img src={putiikkiLogo} style={{ maxHeight: 150 }} /> */}
+      <img src={putiikkiLogo} style={{ maxHeight: 100 }} />
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Typography fontSize={30} mr={2} sx={{ alignSelf: 'flex-end' }}>Hei</Typography>
         <Typography variant='h3' fontFamily='Lobster Two'>{currentUser.name}</Typography>
