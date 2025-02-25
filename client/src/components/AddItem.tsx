@@ -61,7 +61,7 @@ export const AddItem: React.FC<Props> = ({ isDialog, close }) => {
           close(true);
         }
       })
-      .catch(error => console.log(error));
+      .catch(console.error);
 
   }
 

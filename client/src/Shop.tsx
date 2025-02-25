@@ -23,7 +23,7 @@ export const Shop = () => {
           if (response.data === 'ok')
             setCurrentUser({ ...currentUser, points: currentUser.points - rewardPoints });
         })
-        .catch(error => console.log(error));
+        .catch(console.error);
     }
   }
 
@@ -31,7 +31,7 @@ export const Shop = () => {
     .then(response =>
       setRewards(response.data)
     )
-    .catch(error => console.log(error))
+    .catch(console.error);
 
   useEffect(() => {
     fetchRewards()

@@ -1,7 +1,6 @@
-import { Box, Button, Container, Stack, TextField, Typography } from "@mui/material";
+import { Button, Container, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import ForwardIcon from '@mui/icons-material/Forward';
-import { useNavigate } from "react-router";
 import { useAuth } from "./useAuth";
 
 
@@ -15,7 +14,6 @@ interface LoginProps {
 }
 
 export const Login: React.FC<LoginProps> = () => {
-  const navigate = useNavigate();
   const { login } = useAuth();
 
   const [username, setUsername] = useState<string>('');
@@ -25,7 +23,6 @@ export const Login: React.FC<LoginProps> = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     login(username);
-    navigate('/dashboard');
 
   };
 

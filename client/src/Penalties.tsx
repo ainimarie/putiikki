@@ -24,7 +24,7 @@ export const Penalties = () => {
           if (response.data === 'ok')
             setCurrentUser({ ...currentUser, points: currentUser.points - penaltyPoints });
         })
-        .catch(error => console.log(error));
+        .catch(console.error);
     }
   }
 
@@ -32,7 +32,7 @@ export const Penalties = () => {
     .then(response =>
       setPenalties(response.data)
     )
-    .catch(error => console.log(error))
+    .catch(console.error);
 
   useEffect(() => {
     fetchPenalties()

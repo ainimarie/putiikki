@@ -31,14 +31,13 @@ export const AuthProvider = ({ children }: Props) => {
   const login = async (user: string) => {
     await axios.get(`${API_URL}/users/${user}`)
       .then(response => {
-        console.log(response.data)
         if (response.data !== undefined || response.data.length > 0) {
           setCurrentUser(response.data)
           navigate("/dashboard");
         }
       }
       )
-      .catch(error => console.log(error))
+      .catch(console.error)
   };
 
   // call this function to sign out logged in user
