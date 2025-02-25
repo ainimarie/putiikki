@@ -1,6 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const app = express();
 const port = 3000;
 
@@ -21,5 +25,5 @@ app.use('/penalties', penaltyRouter);
 app.use('/transactions', transactionRouter);
 
 app.listen(port, () => {
-    return console.log(`Express is listening at http://localhost:${port}`);
+    return console.log(`Express is listening at http://localhost:${process.env.PORT}`);
 });
