@@ -24,7 +24,7 @@ export const Tasks = () => {
           if (response.data === 'ok')
             setCurrentUser({ ...currentUser, points: currentUser.points + rewardPoints });
         })
-        .catch(error => console.log(error));
+        .catch(console.error);
     }
   }
 
@@ -32,7 +32,7 @@ export const Tasks = () => {
     .then(response =>
       setTasks(response.data)
     )
-    .catch(error => console.log(error))
+    .catch(console.error);
 
   useEffect(() => {
     fetchTasks()
