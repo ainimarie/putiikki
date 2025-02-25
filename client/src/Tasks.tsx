@@ -10,6 +10,8 @@ type Item = {
   description?: string
 }
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const Tasks = () => {
 
   const { currentUser, setCurrentUser } = useAuth();
@@ -17,7 +19,7 @@ export const Tasks = () => {
 
   const doTask = async (rewardPoints: number) => {
     if (currentUser !== null) {
-      await axios.post('http://localhost:3000/transactions', { user: currentUser.name, points: rewardPoints })
+      await axios.post(`${API_URL}/transactions`, { user: currentUser.name, points: rewardPoints })
         .then(response => {
           if (response.data === 'ok')
             setCurrentUser({ ...currentUser, points: currentUser.points + rewardPoints });
@@ -26,7 +28,7 @@ export const Tasks = () => {
     }
   }
 
-  const fetchTasks = async () => await axios.get('http://localhost:3000/tasks')
+  const fetchTasks = async () => await axios.get(`${API_URL}/tasks`)
     .then(response =>
       setTasks(response.data)
     )

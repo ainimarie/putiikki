@@ -4,8 +4,12 @@ import { Button, CardActions, CardContent, FormControl, FormControlLabel, Grid2 
 import { ChangeEvent, useState } from 'react';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+type ItemType = 'reward' | 'task' | 'penalty';
+
 type AddItem = {
-  type: 'reward' | 'task' | 'penalty',
+  type: ItemType,
   name: string,
   price: number,
   description?: string
@@ -25,7 +29,7 @@ interface Props {
 export const AddItem: React.FC<Props> = ({ isDialog, close }) => {
 
   const initialValues = {
-    type: 'reward' as 'reward',
+    type: 'reward' as ItemType,
     name: '',
     price: 0,
     description: ''
@@ -49,7 +53,7 @@ export const AddItem: React.FC<Props> = ({ isDialog, close }) => {
   const handleSubmit = async () => {
     const url = (inputs.type === 'reward' || inputs.type === 'task') ? `${inputs.type}s` : 'penalties';
 
-    await axios.post(`http://localhost:3000/${url}`, { name: inputs.name, price: inputs.price, description: inputs.description })
+    await axios.post(`${API_URL}/${url}`, { name: inputs.name, price: inputs.price, description: inputs.description })
       .then(response => {
         if (response.data === 'ok')
           setInputs(initialValues)
@@ -111,7 +115,6 @@ export const AddItem: React.FC<Props> = ({ isDialog, close }) => {
             variant='standard'
           />
         </Stack>
-
 
         <TextField
           fullWidth

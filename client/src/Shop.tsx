@@ -3,7 +3,6 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Item } from "./components/Item";
 import { useAuth } from "./auth/useAuth";
-import { AddItem } from "./components/AddItem";
 
 type Item = {
   name: string,
@@ -11,14 +10,15 @@ type Item = {
   description?: string
 }
 
-export const Shop = () => {
+const API_URL = import.meta.env.VITE_API_URL;
 
+export const Shop = () => {
   const [rewards, setRewards] = useState([]);
   const { currentUser, setCurrentUser } = useAuth();
 
   const buyReward = async (rewardPoints: number) => {
     if (currentUser !== null) {
-      await axios.post('http://localhost:3000/transactions', { user: currentUser.name, points: -rewardPoints })
+      await axios.post(`${API_URL}/transactions`, { user: currentUser.name, points: -rewardPoints })
         .then(response => {
           if (response.data === 'ok')
             setCurrentUser({ ...currentUser, points: currentUser.points - rewardPoints });
@@ -27,7 +27,7 @@ export const Shop = () => {
     }
   }
 
-  const fetchRewards = async () => await axios.get('http://localhost:3000/rewards')
+  const fetchRewards = async () => await axios.get(`${API_URL}/rewards`)
     .then(response =>
       setRewards(response.data)
     )
@@ -47,7 +47,7 @@ export const Shop = () => {
 
         {rewards.length > 0 && rewards.map((reward: Item, index: number) => {
           return (
-            <Grid size={{ lg: 4, md: 4, xs: 4, sm: 8 }} key={`grid-${index}`}>
+            <Grid size={{ lg: 4, md: 4, xs: 4, sm: 8 }} key={`grid-${index}`} >
               <Item
                 item={reward}
                 key={`reward-${index}`}
@@ -57,7 +57,7 @@ export const Shop = () => {
             </Grid>
           )
         })}
-      </Grid>
+      </Grid >
     </>
   );
 }

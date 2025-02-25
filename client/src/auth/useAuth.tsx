@@ -18,6 +18,8 @@ interface ProvideAuthContext {
   logout: () => void
 }
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const AuthContext = createContext<ProvideAuthContext | null>(null);
 
 export const AuthProvider = ({ children }: Props) => {
@@ -27,7 +29,7 @@ export const AuthProvider = ({ children }: Props) => {
   const navigate = useNavigate();
 
   const login = async (user: string) => {
-    await axios.get(`http://localhost:3000/users/${user}`)
+    await axios.get(`${API_URL}/users/${user}`)
       .then(response => {
         console.log(response.data)
         if (response.data !== undefined || response.data.length > 0) {

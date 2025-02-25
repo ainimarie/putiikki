@@ -10,6 +10,8 @@ type Item = {
   description?: string
 }
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const Penalties = () => {
 
   const [penalties, setPenalties] = useState([]);
@@ -17,7 +19,7 @@ export const Penalties = () => {
 
   const getPenalty = async (penaltyPoints: number) => {
     if (currentUser !== null) {
-      await axios.post('http://localhost:3000/transactions', { user: currentUser.name, points: -penaltyPoints })
+      await axios.post(`${API_URL}/transactions`, { user: currentUser.name, points: -penaltyPoints })
         .then(response => {
           if (response.data === 'ok')
             setCurrentUser({ ...currentUser, points: currentUser.points - penaltyPoints });
@@ -26,7 +28,7 @@ export const Penalties = () => {
     }
   }
 
-  const fetchPenalties = async () => await axios.get('http://localhost:3000/penalties')
+  const fetchPenalties = async () => await axios.get(`${API_URL}/penalties`)
     .then(response =>
       setPenalties(response.data)
     )
