@@ -1,4 +1,4 @@
-import { Grid2 as Grid } from "@mui/material";
+import { Alert, Grid2 as Grid, Snackbar, SnackbarCloseReason } from "@mui/material";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Item } from "./components/Item";
@@ -12,12 +12,17 @@ type Item = {
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+
 export const Shop = () => {
   const [rewards, setRewards] = useState([]);
   const { currentUser, setCurrentUser } = useAuth();
 
   const buyReward = async (rewardPoints: number) => {
     if (currentUser !== null) {
+      if (rewardPoints >= currentUser.points) {
+        // TODO: Add notification snackbar when they're done
+        return;
+      }
       await axios.post(`${API_URL}/transactions`, { user: currentUser.name, points: -rewardPoints })
         .then(response => {
           if (response.data === 'ok')
