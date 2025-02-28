@@ -8,8 +8,8 @@ A small app for getting points from tasks and earning rewards. Made for my torna
 - doesn't include real logins or signups
 - SQLite for database
 
-### lisäkehitys suomeksi
+## To be done
 
-- superkäyttäjä joka voi lisätä palkintoja
-- näkymä siihen, miten työtehtävä etenee
-- söpö kartta johonkin isoon palkintoon ヽ(✿ﾟ▽ﾟ)ノ
+- Change database to something else
+- Separate API completely
+- Gamifying ヽ(✿ﾟ▽ﾟ)ノ
