@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography';
 import { Button, CardActions, CardContent, FormControl, FormControlLabel, Grid2 as Grid, MenuItem, Paper, Select, SelectChangeEvent, Switch, TextField } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import axios from 'axios';
+import { Severity, useNotification } from '../store/NotificationContext';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -27,6 +28,7 @@ interface Props {
 }
 
 export const AddItem: React.FC<Props> = ({ isDialog, close }) => {
+  const { openNotification } = useNotification();
 
   const initialValues = {
     type: 'reward' as ItemType,
@@ -56,12 +58,19 @@ export const AddItem: React.FC<Props> = ({ isDialog, close }) => {
     await axios.post(`${API_URL}/${url}`, { name: inputs.name, price: inputs.price, description: inputs.description })
       .then(response => {
         if (response.data === 'ok')
-          setInputs(initialValues)
+          openNotification({
+            message: 'Lisätty', severity: Severity.Success
+          })
+        else
+          openNotification({
+            message: 'Jokin meni pieleen', severity: Severity.Error
+          })
+        setInputs(initialValues)
         if ((isDialog && close !== undefined) && !addMany) {
           close(true);
         }
       })
-      .catch(console.error);
+      .catch(error => openNotification({ message: error.message, severity: Severity.Error }));
 
   }
 
