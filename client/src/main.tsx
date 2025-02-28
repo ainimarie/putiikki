@@ -10,12 +10,15 @@ import { router } from './App.tsx'
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
 import theme from './theme.tsx';
+import { NotificationProvider } from './store/NotificationContext.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <RouterProvider router={router} />
+      <NotificationProvider>
+        <RouterProvider router={router} />
+      </NotificationProvider>
     </ThemeProvider>
-  </StrictMode>,
+  </StrictMode >,
 )

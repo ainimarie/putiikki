@@ -1,8 +1,9 @@
-import { Alert, Grid2 as Grid, Snackbar, SnackbarCloseReason } from "@mui/material";
+import { Grid2 as Grid } from "@mui/material";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Item } from "./components/Item";
 import { useAuth } from "./auth/useAuth";
+import { Severity, useNotification } from "./store/NotificationContext";
 
 type Item = {
   name: string,
@@ -16,19 +17,26 @@ const API_URL = import.meta.env.VITE_API_URL;
 export const Shop = () => {
   const [rewards, setRewards] = useState([]);
   const { currentUser, setCurrentUser } = useAuth();
+  const { openNotification } = useNotification();
 
   const buyReward = async (rewardPoints: number) => {
     if (currentUser !== null) {
       if (rewardPoints >= currentUser.points) {
-        // TODO: Add notification snackbar when they're done
+        openNotification({
+          message: 'Ei tarpeeksi pisteitä', severity: Severity.Error
+        })
         return;
+
       }
       await axios.post(`${API_URL}/transactions`, { user: currentUser.name, points: -rewardPoints })
         .then(response => {
           if (response.data === 'ok')
             setCurrentUser({ ...currentUser, points: currentUser.points - rewardPoints });
+          openNotification({
+            message: 'Ostettu', severity: Severity.Success
+          })
         })
-        .catch(console.error);
+        .catch(error => openNotification({ message: error.message, severity: Severity.Error }));
     }
   }
 

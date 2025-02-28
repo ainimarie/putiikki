@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Item } from "./components/Item";
 import { useAuth } from "./auth/useAuth";
+import { Severity, useNotification } from "./store/NotificationContext";
 
 type Item = {
   name: string,
@@ -15,6 +16,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 export const Tasks = () => {
 
   const { currentUser, setCurrentUser } = useAuth();
+  const { openNotification } = useNotification();
   const [tasks, setTasks] = useState([]);
 
   const doTask = async (rewardPoints: number) => {
@@ -22,9 +24,12 @@ export const Tasks = () => {
       await axios.post(`${API_URL}/transactions`, { user: currentUser.name, points: rewardPoints })
         .then(response => {
           if (response.data === 'ok')
-            setCurrentUser({ ...currentUser, points: currentUser.points + rewardPoints });
+            openNotification({
+              message: `Ansaitsit ${rewardPoints} pistettä!`, severity: Severity.Success
+            })
+          setCurrentUser({ ...currentUser, points: currentUser.points + rewardPoints });
         })
-        .catch(console.error);
+        .catch(error => openNotification({ message: error.message, severity: Severity.Error }))
     }
   }
 
