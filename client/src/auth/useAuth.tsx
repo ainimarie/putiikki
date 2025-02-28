@@ -14,7 +14,7 @@ type Props = {
 interface ProvideAuthContext {
   currentUser: User | null,
   setCurrentUser: Dispatch<SetStateAction<User | null>>,
-  login: (name: string) => void,
+  login: ((name: string) => Promise<void>),
   logout: () => void
 }
 
@@ -24,23 +24,20 @@ const AuthContext = createContext<ProvideAuthContext | null>(null);
 
 export const AuthProvider = ({ children }: Props) => {
 
+  const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  const navigate = useNavigate();
-
-  const login = async (user: string) => {
+  const login = async (user: string): Promise<void> => {
     await axios.get(`${API_URL}/users/${user}`)
       .then(response => {
         if (response.data !== undefined || response.data.length > 0) {
-          setCurrentUser(response.data)
-          navigate("/dashboard");
+          return setCurrentUser(response.data)
         }
-      }
-      )
+      })
+      .then(() => navigate("/dashboard"))
       .catch(console.error)
   };
 
-  // call this function to sign out logged in user
   const logout = () => {
     setCurrentUser(null);
     navigate("/", { replace: true });
