@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Item } from "./components/Item";
 import { useAuth } from "./auth/useAuth";
+import { Severity, useNotification } from "./store/NotificationContext";
 
 type Item = {
   name: string,
@@ -15,6 +16,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 export const Penalties = () => {
 
   const [penalties, setPenalties] = useState([]);
+  const { openNotification } = useNotification();
   const { currentUser, setCurrentUser } = useAuth();
 
   const getPenalty = async (penaltyPoints: number) => {
@@ -22,9 +24,10 @@ export const Penalties = () => {
       await axios.post(`${API_URL}/transactions`, { user: currentUser.name, points: -penaltyPoints })
         .then(response => {
           if (response.data === 'ok')
-            setCurrentUser({ ...currentUser, points: currentUser.points - penaltyPoints });
+            openNotification({ message: `Menetit ${penaltyPoints} pistettä!`, severity: Severity.Error })
+          setCurrentUser({ ...currentUser, points: currentUser.points - penaltyPoints });
         })
-        .catch(console.error);
+        .catch(error => openNotification({ message: error.message, severity: Severity.Error }));
     }
   }
 
