@@ -3,7 +3,6 @@ import { useState } from "react";
 import ForwardIcon from '@mui/icons-material/Forward';
 import { useAuth } from "./useAuth";
 
-
 type User = {
   name: string,
   points: number
@@ -17,13 +16,15 @@ export const Login: React.FC<LoginProps> = () => {
   const { login } = useAuth();
 
   const [username, setUsername] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
 
   // Add loading logic and cute graphic
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    login(username);
-
+    setIsSubmitting(true);
+    await login(username)
+      .finally(() => setIsSubmitting(false));
   };
 
   return (
@@ -40,7 +41,14 @@ export const Login: React.FC<LoginProps> = () => {
           <TextField id="outlined-basic" label="nimesi" variant="outlined" onChange={(e) => setUsername(e.target.value)} value={username} />
           <Typography variant='h5' sx={{ alignSelf: 'center' }}>!</Typography>
         </Stack>
-        <Button variant='contained' type='submit' endIcon={<ForwardIcon />} sx={{ maxWidth: { sm: '150px' }, alignSelf: 'center' }} fullWidth >
+        <Button
+          variant='contained'
+          type='submit'
+          endIcon={<ForwardIcon />}
+          sx={{ maxWidth: { sm: '150px' }, alignSelf: 'center' }}
+          fullWidth
+          disabled={isSubmitting}
+        >
           Mennään
         </Button>
       </Stack >

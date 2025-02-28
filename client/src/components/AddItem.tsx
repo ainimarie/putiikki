@@ -37,6 +37,7 @@ export const AddItem: React.FC<Props> = ({ isDialog, close }) => {
     description: ''
   }
 
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [inputs, setInputs] = useState<AddItem>(initialValues);
   const [addMany, setAddMany] = useState<boolean>(false);
 
@@ -54,6 +55,7 @@ export const AddItem: React.FC<Props> = ({ isDialog, close }) => {
 
   const handleSubmit = async () => {
     const url = (inputs.type === 'reward' || inputs.type === 'task') ? `${inputs.type}s` : 'penalties';
+    setIsSubmitting(true);
 
     await axios.post(`${API_URL}/${url}`, { name: inputs.name, price: inputs.price, description: inputs.description })
       .then(response => {
@@ -70,7 +72,8 @@ export const AddItem: React.FC<Props> = ({ isDialog, close }) => {
           close(true);
         }
       })
-      .catch(error => openNotification({ message: error.message, severity: Severity.Error }));
+      .catch(error => openNotification({ message: error.message, severity: Severity.Error }))
+      .finally(() => setIsSubmitting(false))
 
   }
 
@@ -118,7 +121,6 @@ export const AddItem: React.FC<Props> = ({ isDialog, close }) => {
             name="price"
             label="Pisteet"
             onChange={handleChange}
-            // type='number'
             value={inputs.price || ''}
             sx={{ maxWidth: '100px', mb: 1 }}
             variant='standard'
@@ -138,7 +140,7 @@ export const AddItem: React.FC<Props> = ({ isDialog, close }) => {
         />
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-between' }}>
-        <Button size="small" variant='outlined' onClick={handleSubmit}>Lisää {TYPE[inputs.type]}</Button>
+        <Button size="small" variant='outlined' onClick={handleSubmit} disabled={isSubmitting}>Lisää {TYPE[inputs.type]}</Button>
         {isDialog && <FormControlLabel control={<Switch checked={addMany} onChange={handleSwitchChange} />} label="Lisää monta" />}
       </CardActions>
     </Paper >

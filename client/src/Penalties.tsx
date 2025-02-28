@@ -16,18 +16,21 @@ const API_URL = import.meta.env.VITE_API_URL;
 export const Penalties = () => {
 
   const [penalties, setPenalties] = useState([]);
+  const [purchaseLoading, setPurchaseLoading] = useState<boolean>(false);
   const { openNotification } = useNotification();
   const { currentUser, setCurrentUser } = useAuth();
 
   const getPenalty = async (penaltyPoints: number) => {
     if (currentUser !== null) {
+      setPurchaseLoading(true);
       await axios.post(`${API_URL}/transactions`, { user: currentUser.name, points: -penaltyPoints })
         .then(response => {
           if (response.data === 'ok')
             openNotification({ message: `Menetit ${penaltyPoints} pistettä!`, severity: Severity.Error })
           setCurrentUser({ ...currentUser, points: currentUser.points - penaltyPoints });
         })
-        .catch(error => openNotification({ message: error.message, severity: Severity.Error }));
+        .catch(error => openNotification({ message: error.message, severity: Severity.Error }))
+        .finally(() => setPurchaseLoading(false));
     }
   }
 
@@ -55,6 +58,7 @@ export const Penalties = () => {
               key={`reward-${index}`}
               handlePoints={(points: number) => getPenalty(points)}
               buttonTitle='Vähennä'
+              isLoading={purchaseLoading}
               isPenalty
             />
           </Grid>
