@@ -18,9 +18,11 @@ export const Tasks = () => {
   const { currentUser, setCurrentUser } = useAuth();
   const { openNotification } = useNotification();
   const [tasks, setTasks] = useState([]);
+  const [purchaseLoading, setPurchaseLoading] = useState<boolean>(false);
 
   const doTask = async (rewardPoints: number) => {
     if (currentUser !== null) {
+      setPurchaseLoading(true);
       await axios.post(`${API_URL}/transactions`, { user: currentUser.name, points: rewardPoints })
         .then(response => {
           if (response.data === 'ok')
@@ -30,6 +32,7 @@ export const Tasks = () => {
           setCurrentUser({ ...currentUser, points: currentUser.points + rewardPoints });
         })
         .catch(error => openNotification({ message: error.message, severity: Severity.Error }))
+        .finally(() => setPurchaseLoading(false));
     }
   }
 
@@ -57,6 +60,7 @@ export const Tasks = () => {
               key={`task-${index}`}
               handlePoints={(points: number) => doTask(points)}
               buttonTitle='Tee'
+              isLoading={purchaseLoading}
             />
           </Grid>
         )

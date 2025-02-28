@@ -14,10 +14,11 @@ interface ItemProps {
   item: Item;
   handlePoints: (points: number) => void;
   buttonTitle: string;
+  isLoading: boolean;
   isPenalty?: boolean;
 }
 
-export const Item: React.FC<ItemProps> = ({ item, handlePoints, buttonTitle, isPenalty }) => {
+export const Item: React.FC<ItemProps> = ({ item, handlePoints, isLoading, buttonTitle, isPenalty }) => {
   return (
     <Card variant="outlined" sx={{ margin: 2 }}>
       <CardContent sx={{ minHeight: '92px' }}>
@@ -38,7 +39,9 @@ export const Item: React.FC<ItemProps> = ({ item, handlePoints, buttonTitle, isP
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" variant='outlined' onClick={() => handlePoints(item.price)}>{buttonTitle}</Button>
+        <Button size="small" variant='outlined' onClick={() => handlePoints(item.price)} disabled={isLoading}>
+          {buttonTitle}
+        </Button>
       </CardActions>
     </Card >
   );

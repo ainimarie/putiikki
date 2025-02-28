@@ -16,15 +16,18 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export const Shop = () => {
   const [rewards, setRewards] = useState([]);
+  const [purchaseLoading, setPurchaseLoading] = useState<boolean>(false);
   const { currentUser, setCurrentUser } = useAuth();
   const { openNotification } = useNotification();
 
   const buyReward = async (rewardPoints: number) => {
+    setPurchaseLoading(true);
     if (currentUser !== null) {
       if (rewardPoints >= currentUser.points) {
         openNotification({
           message: 'Ei tarpeeksi pisteitä', severity: Severity.Error
         })
+        setPurchaseLoading(false);
         return;
 
       }
@@ -36,7 +39,8 @@ export const Shop = () => {
             message: 'Ostettu', severity: Severity.Success
           })
         })
-        .catch(error => openNotification({ message: error.message, severity: Severity.Error }));
+        .catch(error => openNotification({ message: error.message, severity: Severity.Error }))
+        .finally(() => setPurchaseLoading(false));
     }
   }
 
@@ -66,6 +70,7 @@ export const Shop = () => {
                 key={`reward-${index}`}
                 handlePoints={(points: number) => buyReward(points)}
                 buttonTitle='Osta'
+                isLoading={purchaseLoading}
               />
             </Grid>
           )
