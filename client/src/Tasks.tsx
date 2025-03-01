@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Item } from "./components/Item";
 import { useAuth } from "./auth/useAuth";
 import { Severity, useNotification } from "./store/NotificationContext";
+import { Loading } from "./layout/Loading";
 
 type Item = {
   name: string,
@@ -18,6 +19,7 @@ export const Tasks = () => {
   const { currentUser, setCurrentUser } = useAuth();
   const { openNotification } = useNotification();
   const [tasks, setTasks] = useState([]);
+  const [tasksLoading, setTasksLoading] = useState<boolean>(false);
   const [purchaseLoading, setPurchaseLoading] = useState<boolean>(false);
 
   const doTask = async (rewardPoints: number) => {
@@ -36,15 +38,20 @@ export const Tasks = () => {
     }
   }
 
-  const fetchTasks = async () => await axios.get(`${API_URL}/tasks`)
-    .then(response =>
-      setTasks(response.data)
-    )
-    .catch(console.error);
-
+  const fetchTasks = async () => {
+    setTasksLoading(true);
+    await axios.get(`${API_URL}/tasks`)
+      .then(response =>
+        setTasks(response.data)
+      )
+      .catch(_error => { throw new Error("Failed to fetch tasks") })
+      .finally(() => setTasksLoading(false));
+  }
   useEffect(() => {
     fetchTasks()
   }, [])
+
+  if (tasksLoading) return <Loading />
 
   return (
     <Grid container direction="row"
