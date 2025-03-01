@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Item } from "./components/Item";
 import { useAuth } from "./auth/useAuth";
 import { Severity, useNotification } from "./store/NotificationContext";
+import { Loading } from "./layout/Loading";
 
 type Item = {
   name: string,
@@ -16,6 +17,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export const Shop = () => {
   const [rewards, setRewards] = useState([]);
+  const [rewardsLoading, setRewardsLoading] = useState<boolean>(true);
   const [purchaseLoading, setPurchaseLoading] = useState<boolean>(false);
   const { currentUser, setCurrentUser } = useAuth();
   const { openNotification } = useNotification();
@@ -44,15 +46,20 @@ export const Shop = () => {
     }
   }
 
-  const fetchRewards = async () => await axios.get(`${API_URL}/rewards`)
-    .then(response =>
-      setRewards(response.data)
-    )
-    .catch(console.error);
-
+  const fetchRewards = async () => {
+    setRewardsLoading(true);
+    await axios.get(`${API_URL}/rewards`)
+      .then(response =>
+        setRewards(response.data)
+      )
+      .catch((_error) => { throw new Error("Failed to fetch rewards") })
+      .finally(() => setRewardsLoading(false));
+  }
   useEffect(() => {
     fetchRewards()
   }, [])
+
+  if (rewardsLoading) return <Loading />
 
   return (
     <>

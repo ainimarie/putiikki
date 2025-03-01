@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Item } from "./components/Item";
 import { useAuth } from "./auth/useAuth";
 import { Severity, useNotification } from "./store/NotificationContext";
+import { Loading } from "./layout/Loading";
 
 type Item = {
   name: string,
@@ -17,6 +18,7 @@ export const Penalties = () => {
 
   const [penalties, setPenalties] = useState([]);
   const [purchaseLoading, setPurchaseLoading] = useState<boolean>(false);
+  const [penaltiesLoading, setPenaltiesLoading] = useState<boolean>(false);
   const { openNotification } = useNotification();
   const { currentUser, setCurrentUser } = useAuth();
 
@@ -34,15 +36,21 @@ export const Penalties = () => {
     }
   }
 
-  const fetchPenalties = async () => await axios.get(`${API_URL}/penalties`)
-    .then(response =>
-      setPenalties(response.data)
-    )
-    .catch(console.error);
+  const fetchPenalties = async () => {
+    setPenaltiesLoading(true);
+    await axios.get(`${API_URL}/penalties`)
+      .then(response =>
+        setPenalties(response.data)
+      )
+      .catch(_error => { throw new Error("Failed to fetch penalties") })
+      .finally(() => setPenaltiesLoading(false));
+  }
 
   useEffect(() => {
     fetchPenalties()
   }, [])
+
+  if (penaltiesLoading) return <Loading />
 
   return (
     <Grid container direction="row"
