@@ -25,7 +25,7 @@ export const Penalties = () => {
   const getPenalty = async (penaltyPoints: number) => {
     if (currentUser !== null) {
       setPurchaseLoading(true);
-      await axios.post(`${API_URL}/transactions`, { user: currentUser.name, points: -penaltyPoints })
+      await axios.post(`${API_URL}/transactions`, { username: currentUser.username, points: -penaltyPoints })
         .then(response => {
           if (response.data === 'ok')
             openNotification({ message: `Menetit ${penaltyPoints} pistettä!`, severity: Severity.Error })

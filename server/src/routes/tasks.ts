@@ -22,11 +22,12 @@ const taskSchema = z.object({
 
 
 
-router.get('/', function (req, res, next) {
+router.get('/', async function (req, res, next) {
     try {
         // pageNumber not used at the moment, but maybe at some point.
         const pageNumber: number = typeof req.query.page === 'string' && parseInt(req.query.page);
-        res.json(getMultiple(pageNumber));
+        const tasks = await getMultiple(pageNumber)
+        res.json(tasks);
     } catch (err) {
         console.error(`Error while getting tasks `, err.message);
         next(err);
@@ -35,12 +36,12 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
     try {
-        const reward = taskSchema.parse(req.body);
+        const taskToBeAdded = taskSchema.parse(req.body);
 
         const task = {
-            name: reward.name,
-            price: reward.price,
-            description: reward.description || null
+            name: taskToBeAdded.name,
+            price: taskToBeAdded.price,
+            description: taskToBeAdded.description || null
         }
 
         addTask(task);

@@ -14,7 +14,6 @@ type Item = {
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-
 export const Shop = () => {
   const [rewards, setRewards] = useState([]);
   const [rewardsLoading, setRewardsLoading] = useState<boolean>(true);
@@ -31,9 +30,8 @@ export const Shop = () => {
         })
         setPurchaseLoading(false);
         return;
-
       }
-      await axios.post(`${API_URL}/transactions`, { user: currentUser.name, points: -rewardPoints })
+      await axios.post(`${API_URL}/transactions`, { username: currentUser.username, points: -rewardPoints })
         .then(response => {
           if (response.data === 'ok')
             setCurrentUser({ ...currentUser, points: currentUser.points - rewardPoints });

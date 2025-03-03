@@ -4,7 +4,7 @@ import { z, ZodError } from 'zod';
 export const router = express.Router();
 
 const userSchema = z.object({
-  user: z.string(),
+  username: z.string(),
   points: z.number().nullable()
 });
 
@@ -12,10 +12,10 @@ router.post('/', function (req, res, next) {
   try {
     const user = userSchema.parse(req.body)
 
-    const name = user.user;
+    const username = user.username;
     const points = user.points;
 
-    updatePoints(name, points);
+    updatePoints(username, points);
 
     res.status(200).json('ok');
 

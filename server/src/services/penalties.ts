@@ -6,8 +6,8 @@ type Penalty = {
     description?: string
 }
 
-export function getMultiple() {
-    const data = getMany(`SELECT * FROM penalties`);
+export async function getMultiple() {
+    const data = await getMany(`SELECT * FROM penalties`);
 
     const tasks: Penalty[] = data.map((item: Penalty) => ({
         name: item.name, price: item.price, description: item.description
@@ -16,8 +16,8 @@ export function getMultiple() {
     return tasks;
 }
 
-export function addPenalty(penalty: Penalty) {
-    const sql = `INSERT INTO penalties (name, price, description) VALUES (?, ?, ?)`;
+export async function addPenalty(penalty: Penalty) {
+    const sql = `INSERT INTO penalties (name, price, description) VALUES ($1, $2, $3)`;
 
-    update(sql, [penalty.name, penalty.price, penalty.description]);
+    await update(sql, [penalty.name, penalty.price, penalty.description]);
 }

@@ -20,16 +20,17 @@ const penaltySchema = z.object({
     description: z.string().nullable()
 });
 
-router.get('/', function (req, res, next) {
+router.get('/', async function (req, res, next) {
     try {
-        res.json(getMultiple());
+        const penalties = await getMultiple();
+        res.json(penalties);
     } catch (err) {
         console.error(`Error while getting penalties `, err.message);
         next(err);
     }
 });
 
-router.post('/', function (req, res, next) {
+router.post('/', async function (req, res, next) {
     try {
         const penalty = penaltySchema.parse(req.body);
 
@@ -39,7 +40,7 @@ router.post('/', function (req, res, next) {
             description: penalty.description || null
         }
 
-        addPenalty(item);
+        await addPenalty(item);
         res.status(200).json('ok');
     } catch (err) {
         console.error(`Error while adding penalty `, err.message);
