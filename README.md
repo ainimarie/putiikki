@@ -2,14 +2,9 @@
 
 A small app for getting points from tasks and earning rewards. Made for my tornado-twins ♥
 
-## First version, PoC
+React frontend, Node.js backend, PostgreSQL database. Backend to be changed for nestJS at some point, some documentation to be added.
 
-- made for local environment, no real authentication
-- doesn't include real logins or signups
-- SQLite for database
+## To be done
 
-### lisäkehitys suomeksi
-
-- superkäyttäjä joka voi lisätä palkintoja
-- näkymä siihen, miten työtehtävä etenee
-- söpö kartta johonkin isoon palkintoon ヽ(✿ﾟ▽ﾟ)ノ
+- Separate API completely
+- Gamifying ヽ(✿ﾟ▽ﾟ)ノ
