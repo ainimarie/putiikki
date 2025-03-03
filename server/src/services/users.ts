@@ -1,36 +1,55 @@
 import { getOne, update } from './db';
 
-// Add some typechecks ( ﾉ ﾟｰﾟ)ﾉ
-type User = {
+// TODO: Add some typechecks ( ﾉ ﾟｰﾟ)ﾉ
+export type User = {
   name: string,
+  username: string,
   points: number,
 }
 
-export function fetchUser(name: string) {
-  const userQuery = getOne('SELECT * FROM customers WHERE name = ? COLLATE NOCASE', name);
-
-  return userQuery;
-
+type AuthData = {
+  username: string,
+  password: string,
 }
 
-export function getUser(name: string) {
-  const userQuery = getOne('SELECT name, points FROM customers WHERE name = ? COLLATE NOCASE', name);
+type UserRow = User & AuthData
+
+export async function fetchUser(username: string): Promise<User> {
+  const userQuery: UserRow | undefined = await getOne('SELECT * FROM customers WHERE username = LOWER($1)', [username]);
+  return {
+    username: userQuery.username,
+    name: userQuery.name,
+    points: userQuery.points
+  };
+}
+
+export async function getUser(user: AuthData) {
+  const userQuery = await getOne('SELECT name, points, username FROM customers WHERE username = LOWER($1) and pword = $2', [user.username, user.password]);
 
   if (userQuery)
-    return userQuery as User;
-
+    return {
+      name: userQuery.name || '',
+      points: userQuery.points,
+      username: userQuery.username
+    } as User;
 }
 
-export function updatePoints(name: string, points: number) {
-  const userToUpdate = getUser(name);
+export async function addUser(user: AuthData & { name: string }) {
+  const sql = 'INSERT INTO customers (username, points, pword, name) VALUES ($1, 0, $2, $3)';
+  await update(sql, [user.username, user.password, user.name]);
+  return;
+}
+
+export async function updatePoints(username: string, points: number) {
+  const userToUpdate = await fetchUser(username);
 
   if (!userToUpdate) {
-    throw new Error(`User ${name} not found`);
+    throw new Error(`User ${username} not found`);
   }
   const updatedPoints = (userToUpdate.points === null ? 0 : userToUpdate.points) + points;
 
-  const sql = 'UPDATE customers SET points = ? WHERE name = ?';
-  update(sql, [updatedPoints, userToUpdate.name])
+  const sql = 'UPDATE customers SET points = $1 WHERE username = $2';
+  await update(sql, [updatedPoints, userToUpdate.username]);
 
   return;
 }

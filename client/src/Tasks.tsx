@@ -25,7 +25,7 @@ export const Tasks = () => {
   const doTask = async (rewardPoints: number) => {
     if (currentUser !== null) {
       setPurchaseLoading(true);
-      await axios.post(`${API_URL}/transactions`, { user: currentUser.name, points: rewardPoints })
+      await axios.post(`${API_URL}/transactions`, { username: currentUser.username, points: rewardPoints })
         .then(response => {
           if (response.data === 'ok')
             openNotification({

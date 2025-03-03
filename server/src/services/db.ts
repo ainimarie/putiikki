@@ -1,25 +1,37 @@
-import sqlite from 'better-sqlite3';
-import path from 'path';
-const db = new sqlite(path.resolve(process.env.DB), { fileMustExist: true });
+import { Pool } from 'pg';
+import dotenv from 'dotenv';
 
-// removes slight lagging with some caveats
-// https://www.sqlite.org/wal.html
-db.pragma('journal_mode = WAL');
+dotenv.config();
 
-export function getMany(sql: string, params?) {
-    if (params) {
-        return db.prepare(sql).all(params)
-    } else
-        return db.prepare(sql).all();
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+});
+
+export async function getMany(sql: string, params?: any[]) {
+    const client = await pool.connect();
+    try {
+        const res = await client.query(sql, params);
+        return res.rows;
+    } finally {
+        client.release();
+    }
 }
 
-export function getOne(sql: string, params?) {
-    if (params) {
-        return db.prepare(sql).get(params)
-    } else
-        return db.prepare(sql).get();
+export async function getOne(sql: string, params?: any[]) {
+    const client = await pool.connect();
+    try {
+        const res = await client.query(sql, params);
+        return res.rows[0];
+    } finally {
+        client.release();
+    }
 }
 
-export function update(sql: string, params: any) {
-    db.prepare(sql).run(params);
+export async function update(sql: string, params: any[]) {
+    const client = await pool.connect();
+    try {
+        await client.query(sql, params);
+    } finally {
+        client.release();
+    }
 }

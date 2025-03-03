@@ -20,10 +20,11 @@ const rewardSchema = z.object({
     description: z.string().nullable()
 });
 
-router.get('/', function (req, res, next) {
+router.get('/', async function (req, res, next) {
     try {
         const pageNumber: number = typeof req.query.page === 'string' && parseInt(req.query.page);
-        res.json(getMultiple(pageNumber));
+        const rewards = await getMultiple(pageNumber);
+        res.json(rewards);
     } catch (err) {
         console.error(`Error while getting rewards `, err.message);
         next(err);
