@@ -21,6 +21,9 @@ export async function getOne(sql: string, params?: any[]) {
     const client = await pool.connect();
     try {
         const res = await client.query(sql, params);
+        if (res.rowCount <= 0) {
+            return;
+        }
         return res.rows[0];
     } finally {
         client.release();

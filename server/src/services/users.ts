@@ -1,3 +1,4 @@
+import { compare } from 'bcryptjs';
 import { getOne, update } from './db';
 
 // TODO: Add some typechecks ( ﾉ ﾟｰﾟ)ﾉ
@@ -15,26 +16,31 @@ type AuthData = {
 type UserRow = User & AuthData
 
 export async function fetchUser(username: string): Promise<User> {
-  const userQuery: UserRow | undefined = await getOne('SELECT * FROM customers WHERE username = LOWER($1)', [username]);
-  return {
-    username: userQuery.username,
-    name: userQuery.name,
-    points: userQuery.points
-  };
+  const userQuery: UserRow | undefined = await getOne('SELECT * FROM customers WHERE username = LOWER($1)', [username])
+
+  if (userQuery !== undefined) {
+    return {
+      username: userQuery.username,
+      name: userQuery.name,
+      points: userQuery.points
+    };
+  }
 }
 
-export async function getUser(user: AuthData) {
-  const userQuery = await getOne('SELECT name, points, username FROM customers WHERE username = LOWER($1) and pword = $2', [user.username, user.password]);
+export async function getUserWithPassword(user: AuthData): Promise<User> {
+  const userQuery = await getOne('SELECT * FROM customers WHERE username = LOWER($1)', [user.username]);
 
-  if (userQuery)
+  const passwordMatch = await compare(user.password, userQuery.pword)
+
+  if (userQuery && passwordMatch)
     return {
       name: userQuery.name || '',
       points: userQuery.points,
       username: userQuery.username
-    } as User;
+    };
 }
 
-export async function addUser(user: AuthData & { name: string }) {
+export async function addUser(user: AuthData & { name: string }): Promise<User> {
   const sql = 'INSERT INTO customers (username, points, pword, name) VALUES ($1, 0, $2, $3)';
   await update(sql, [user.username, user.password, user.name]);
   return;
