@@ -1,7 +1,8 @@
 import express from 'express';
 import { hash } from 'bcryptjs';
 export const router = express.Router();
-import { addUser, fetchUser, getUserWithPassword, User } from '../services/users';
+import { addUser, fetchUser, getUserWithPassword } from '../services/users';
+import { User } from "@putiikki/user";
 import { createJWT } from '../util/auth';
 import { z } from 'zod';
 

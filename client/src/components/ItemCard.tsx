@@ -3,14 +3,9 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Button, CardActions, CardContent } from '@mui/material';
+import { Item } from '@putiikki/item'
 
-type Item = {
-  name: string,
-  price: number,
-  description?: string,
-}
-
-interface ItemProps {
+interface ItemCard {
   item: Item;
   handlePoints: (points: number) => void;
   buttonTitle: string;
@@ -18,7 +13,7 @@ interface ItemProps {
   isPenalty?: boolean;
 }
 
-export const Item: React.FC<ItemProps> = ({ item, handlePoints, isLoading, buttonTitle, isPenalty }) => {
+export const ItemCard: React.FC<ItemCard> = ({ item, handlePoints, isLoading, buttonTitle, isPenalty }) => {
   return (
     <Card variant="outlined" sx={{ margin: 2 }}>
       <CardContent sx={{ minHeight: '92px' }}>

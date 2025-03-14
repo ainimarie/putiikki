@@ -1,17 +1,6 @@
 import { compare } from 'bcryptjs';
 import { getOne, update } from './db';
-
-// TODO: Add some typechecks ( ﾉ ﾟｰﾟ)ﾉ
-export type User = {
-  name: string,
-  username: string,
-  points: number,
-}
-
-type AuthData = {
-  username: string,
-  password: string,
-}
+import { AuthData, User } from '@putiikki/user';
 
 type UserRow = User & AuthData
 

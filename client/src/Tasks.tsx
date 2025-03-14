@@ -1,16 +1,12 @@
 import { Grid2 as Grid } from "@mui/material";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Item } from "./components/Item";
+import { ItemCard } from "./components/ItemCard";
 import { useAuth } from "./auth/useAuth";
 import { Severity, useNotification } from "./store/NotificationContext";
 import { Loading } from "./layout/Loading";
+import { Item } from '@putiikki/item'
 
-type Item = {
-  name: string,
-  price: number,
-  description?: string
-}
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -62,7 +58,7 @@ export const Tasks = () => {
       {tasks.length > 0 && tasks.map((task: Item, index: number) => {
         return (
           <Grid size={{ lg: 4, md: 4, xs: 4, sm: 8 }} key={`grid-${index}`}>
-            <Item
+            <ItemCard
               item={task}
               key={`task-${index}`}
               handlePoints={(points: number) => doTask(points)}

@@ -1,20 +1,12 @@
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Button, CardActions, CardContent, FormControl, FormControlLabel, Grid2 as Grid, MenuItem, Paper, Select, SelectChangeEvent, Switch, TextField } from '@mui/material';
+import { Button, CardActions, CardContent, FormControl, FormControlLabel, MenuItem, Paper, Select, SelectChangeEvent, Switch, TextField } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import axios from 'axios';
 import { Severity, useNotification } from '../store/NotificationContext';
+import { ItemType, ItemWithType } from '@putiikki/item';
 
 const API_URL = import.meta.env.VITE_API_URL;
-
-type ItemType = 'reward' | 'task' | 'penalty';
-
-type AddItem = {
-  type: ItemType,
-  name: string,
-  price: number,
-  description?: string
-}
 
 const TYPE = {
   reward: 'Palkinto',
@@ -38,7 +30,7 @@ export const AddItem: React.FC<Props> = ({ isDialog, close }) => {
   }
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [inputs, setInputs] = useState<AddItem>(initialValues);
+  const [inputs, setInputs] = useState<ItemWithType>(initialValues);
   const [addMany, setAddMany] = useState<boolean>(false);
 
   const handleSwitchChange = () => {
