@@ -30,7 +30,7 @@ const theme = createTheme({
 					".MuiOutlinedInput-input:autofill": {
 						WebkitBoxShadow: `0 0 0 100px ${grey.A100} inset`,
 						WebkitTextFillColor: "black",
-						"caret-color": "#000"
+						caretColor: "#000"
 					},
 				}
 			}
