@@ -1,16 +1,12 @@
-import { Button, Container, Stack, TextField, Typography, Link, InputAdornment, IconButton } from "@mui/material";
+import { Button, Container, Stack, TextField, Link, InputAdornment, IconButton } from "@mui/material";
 import { useState } from "react";
 import ForwardIcon from '@mui/icons-material/Forward';
-import { AuthData, useAuth } from "./useAuth";
+import { useAuth } from "./useAuth";
 import { Link as RouterLink, useSearchParams } from "react-router";
 import { VisibilityOutlined, VisibilityOffOutlined } from "@mui/icons-material";
+import { AuthData } from "@putiikki/user";
 
-
-
-interface LoginProps {
-}
-
-export const Login: React.FC<LoginProps> = () => {
+export const Login: React.FC = () => {
   const { login, signup } = useAuth();
   const [searchParams] = useSearchParams();
   const isSignup = searchParams.get('mode') === 'signup';

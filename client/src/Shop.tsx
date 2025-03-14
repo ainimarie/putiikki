@@ -1,16 +1,11 @@
 import { Grid2 as Grid } from "@mui/material";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Item } from "./components/Item";
+import { ItemCard } from "./components/ItemCard";
 import { useAuth } from "./auth/useAuth";
 import { Severity, useNotification } from "./store/NotificationContext";
 import { Loading } from "./layout/Loading";
-
-type Item = {
-  name: string,
-  price: number,
-  description?: string
-}
+import { Item } from '@putiikki/item'
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -70,7 +65,7 @@ export const Shop = () => {
         {rewards.length > 0 && rewards.map((reward: Item, index: number) => {
           return (
             <Grid size={{ lg: 4, md: 4, xs: 4, sm: 8 }} key={`grid-${index}`} >
-              <Item
+              <ItemCard
                 item={reward}
                 key={`reward-${index}`}
                 handlePoints={(points: number) => buyReward(points)}

@@ -1,19 +1,9 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
+import { AuthData, User } from '@putiikki/user';
 import axios from "axios";
 
-export type AuthData = {
-  username: string,
-  password: string,
-}
-
-type User = {
-  name: string,
-  username: string,
-  points: number
-}
-
-type Props = {
+interface Props {
   children?: ReactNode;
 }
 
