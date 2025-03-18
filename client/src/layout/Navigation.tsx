@@ -20,22 +20,28 @@ import { Link as RouterLink } from "react-router";
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from "../auth/useAuth";
 import { AddItem } from "../components/AddItem";
+import { useGroup } from "../store/GroupContext";
 
+// TODO: Change var name
+const routesNormal = [
+  { to: '/dashboard', name: 'Koti' },
+  { to: '/shop', name: 'Kauppa' },
+];
 
-const routes = [
+const routesLeader = [
   { to: '/dashboard', name: 'Koti' },
   { to: '/tasks', name: 'Tehtävät' },
   { to: '/penalties', name: 'Rangaistukset' },
   { to: '/shop', name: 'Kauppa' },
   { to: '/add', name: 'Lisää uusi' }
-]
+];
 
 export const Navigation = () => {
   const { currentUser, logout } = useAuth();
+  const { group } = useGroup();
 
-  if (!currentUser) {
-    return;
-  }
+  const routes = group.leader === currentUser.username ? routesLeader : routesNormal;
+
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);

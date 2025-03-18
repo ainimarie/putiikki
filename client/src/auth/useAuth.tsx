@@ -7,16 +7,33 @@ interface Props {
   children?: ReactNode;
 }
 
-interface ProvideAuthContext {
-  currentUser: User | null,
-  setCurrentUser: Dispatch<SetStateAction<User | null>>,
-  login: ((data: AuthData) => Promise<void>),
-  signup: ((data: AuthData, name: string) => Promise<void>),
-  logout: () => void
+const initialUser: User = {
+  name: '',
+  username: '',
+  points: 0,
+  group: null
 }
 
+interface ProvideAuthContext {
+  currentUser: User,
+  setCurrentUser: Dispatch<SetStateAction<User>>,
+  login: (data: AuthData) => Promise<void>,
+  signup: (data: AuthData, name: string) => Promise<void>,
+  logout: () => void,
+  token: string,
+}
+
+const initialAuthContext = {
+  currentUser: initialUser,
+  setCurrentUser: () => { },
+  login: (() => Promise as any),
+  signup: (() => Promise as any),
+  logout: (() => { }),
+  token: ''
+};
+
 const API_URL = import.meta.env.VITE_API_URL;
-const AuthContext = createContext<ProvideAuthContext | null>(null);
+const AuthContext = createContext<ProvideAuthContext>(initialAuthContext);
 
 export const getAuthToken = () => {
   return localStorage.getItem('authToken');
@@ -25,7 +42,8 @@ export const getAuthToken = () => {
 export const AuthProvider = ({ children }: Props) => {
 
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<User>(initialUser);
+  const token = localStorage.getItem('token') || '';
 
   const login = async ({ username, password }: AuthData): Promise<void> => {
     await axios.post(`${API_URL}/users/login`, { username, password })
@@ -41,7 +59,8 @@ export const AuthProvider = ({ children }: Props) => {
           .then(response => {
             console.log(response.data)
             setCurrentUser(response.data);
-            navigate("/dashboard");
+            console.log("navigate 2")
+            navigate("/groups");
           })
       })
       .catch(console.error)
@@ -59,8 +78,9 @@ export const AuthProvider = ({ children }: Props) => {
   };
 
   const logout = () => {
-    setCurrentUser(null);
+    setCurrentUser(initialUser);
     navigate("/", { replace: true });
+    localStorage.removeItem('token');
   };
 
   const value = useMemo(
@@ -69,7 +89,8 @@ export const AuthProvider = ({ children }: Props) => {
       setCurrentUser,
       login,
       logout,
-      signup
+      signup,
+      token
     }),
     [currentUser]
   );

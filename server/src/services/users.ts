@@ -4,6 +4,7 @@ import { AuthData, User } from '@putiikki/user';
 
 type UserRow = User & AuthData
 
+// TODO: Right return type, fetchUser + fetchGroup, different service for groups mb
 export async function fetchUser(username: string): Promise<User> {
   const userQuery: UserRow | undefined = await getOne('SELECT * FROM customers WHERE username = LOWER($1)', [username])
 
@@ -11,7 +12,8 @@ export async function fetchUser(username: string): Promise<User> {
     return {
       username: userQuery.username,
       name: userQuery.name,
-      points: userQuery.points
+      points: userQuery.points,
+      group: [{ name: "Makkara", uuid: "jotain", leader: 'luna', members: [] }, { name: "Makk234234ara", uuid: "jotain2", leader: 'makkara', members: [] }]
     };
   }
 }
@@ -25,7 +27,8 @@ export async function getUserWithPassword(user: AuthData): Promise<User> {
     return {
       name: userQuery.name || '',
       points: userQuery.points,
-      username: userQuery.username
+      username: userQuery.username,
+      group: [{ name: "Makkara", uuid: "jotain", leader: 'luna', members: [] }]
     };
 }
 
