@@ -5,6 +5,7 @@ import { ChangeEvent, useState } from 'react';
 import axios from 'axios';
 import { Severity, useNotification } from '../store/NotificationContext';
 import { ItemType, ItemWithType } from '@putiikki/item';
+import { useGroup } from '../store/GroupContext';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -21,6 +22,7 @@ interface Props {
 
 export const AddItem: React.FC<Props> = ({ isDialog, close }) => {
   const { openNotification } = useNotification();
+  const { group } = useGroup();
 
   const initialValues = {
     type: 'reward' as ItemType,
@@ -49,7 +51,7 @@ export const AddItem: React.FC<Props> = ({ isDialog, close }) => {
     const url = (inputs.type === 'reward' || inputs.type === 'task') ? `${inputs.type}s` : 'penalties';
     setIsSubmitting(true);
 
-    await axios.post(`${API_URL}/${url}`, { name: inputs.name, price: inputs.price, description: inputs.description })
+    await axios.post(`${API_URL}/groups/${group.uuid}/${url}`, { name: inputs.name, price: inputs.price, description: inputs.description })
       .then(response => {
         if (response.data === 'ok')
           openNotification({

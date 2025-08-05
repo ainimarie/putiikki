@@ -38,9 +38,9 @@ const routesLeader = [
 
 export const Navigation = () => {
   const { currentUser, logout } = useAuth();
-  const { group } = useGroup();
+  const { userPoints, group } = useGroup();
 
-  const routes = group.leader === currentUser.username ? routesLeader : routesNormal;
+  const routes = group.isLeader ? routesLeader : routesNormal;
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -70,7 +70,7 @@ export const Navigation = () => {
   const handleLogout = () => {
     logout();
   }
-  const currentPoints = currentUser.points ? currentUser.points : '0';
+  // const currentPoints = curren ? currentUser.points : '0';
 
   return (
     <AppBar variant="outlined" >
@@ -159,7 +159,7 @@ export const Navigation = () => {
                 alignSelf: 'center'
               }}
             >
-              {currentPoints} pistettä
+              {userPoints} pistettä
             </Typography>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -183,11 +183,14 @@ export const Navigation = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem>
-                <Typography variant='h5' fontFamily={'Lobster Two'}>Hei {currentUser.name}!</Typography>
+              <MenuItem sx={{ cursor: 'default' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <Typography variant='h5' fontFamily={'Lobster Two'}>Hei {currentUser.name}!</Typography>
+                  <Typography variant='body1'>Ryhmä: {group.name}</Typography>
+                </Box>
               </MenuItem>
               <MenuItem>
-                <Typography variant='body1'>Pistetilanne: {currentPoints}</Typography>
+                <Typography variant='body1'>Pistetilanne: {userPoints}</Typography>
               </MenuItem>
               <MenuItem>
                 <Button onClick={handleLogout}>Poistu</Button>

@@ -1,10 +1,10 @@
-import { Group } from './group';
+import { UserGroup } from './group';
 
 export type User = {
   name: string,
   username: string,
   points: number,
-  group: Group[] | null
+  groups: UserGroup[] | null
 }
 
 export type AuthData = {

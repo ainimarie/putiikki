@@ -5,7 +5,7 @@ const KEY = process.env.JWT_SECRET || 'secret';
 
 export function createJWT(username: string) {
   console.log(username)
-  return sign({ username }, KEY, { expiresIn: '1h' });
+  return sign({ username }, KEY, { expiresIn: '5h' });
 }
 
 export function verifyJWT(token: string) {

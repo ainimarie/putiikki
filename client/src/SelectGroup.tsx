@@ -9,8 +9,8 @@ import { useGroup } from "./store/GroupContext";
 export const SelectGroup: React.FC = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-  const { setGroup } = useGroup();
-  const userGroups = currentUser.group;
+  const { group, userPoints, setGroup } = useGroup();
+  const userGroups = currentUser.groups;
   const [selectGroup, setSelectGroup] = useState('');
 
 
@@ -37,10 +37,14 @@ export const SelectGroup: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const selectedGroup = userGroups?.find(group => group.uuid === selectGroup)
+    console.log("selectedGroup", selectedGroup)
     selectedGroup !== undefined && setGroup(selectedGroup)
+    console.log("asdasd", group, userPoints)
     navigate("/dashboard");
 
   }
+
+  console.log("userGroups", userGroups)
 
   return (
     <Container maxWidth="xs" sx={{ my: 4, justifyContent: 'center', alignContent: 'center' }}>
@@ -51,10 +55,10 @@ export const SelectGroup: React.FC = () => {
         noValidate
         autoComplete="off"
       >
-        {userGroups &&
+        {userGroups && userGroups.length > 0 &&
           <>
             <Typography component="div" variant="caption" gutterBottom>Ryhmä:</Typography>
-            <FormControl fullWidth>
+            <FormControl>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -67,7 +71,8 @@ export const SelectGroup: React.FC = () => {
               </Select>
               <Button
                 type="submit"
-                variant="outlined"
+                variant="contained"
+                sx={{ mt: 2 }}
               >
                 Valitse
               </Button>
@@ -78,6 +83,7 @@ export const SelectGroup: React.FC = () => {
           startIcon={<Add />}
           variant="outlined"
           onClick={handleOpenNew}
+          sx={{ mt: 2, maxWidth: 200, alignSelf: 'center' }}
         >
           Luo Uusi
         </Button>

@@ -1,7 +1,7 @@
 import express from 'express';
 import { hash } from 'bcryptjs';
 export const router = express.Router();
-import { addUser, fetchUser, getUserWithPassword } from '../services/users';
+import { addUser, getUser, getUserWithPassword } from '../services/users';
 import { User } from "@putiikki/user";
 import { createJWT } from '../util/auth';
 import { z } from 'zod';
@@ -23,7 +23,7 @@ const userRequestSchema = z.object({
 router.get('/:username', async function (req, res, next) {
   try {
     const name = req.params.username;
-    const user = await fetchUser(name);
+    const user = await getUser(name);
 
     res.json(user);
   } catch (err) {
@@ -34,12 +34,12 @@ router.get('/:username', async function (req, res, next) {
 
 
 router.post('/login', async function (req, res) {
-  let user: User;
+  let user: string;
 
   try {
     const data = userAuthSchema.parse(req.body);
     user = await getUserWithPassword({ username: data.username, password: data.password });
-    const token = createJWT(user.username);
+    const token = createJWT(user);
     res.json({ token });
 
   } catch (err) {
@@ -50,7 +50,7 @@ router.post('/login', async function (req, res) {
 router.post('/signup', async function (req, res, next) {
   try {
     const data = userRequestSchema.parse(req.body);
-    const existingUser = await fetchUser(data.username);
+    const existingUser = await getUser(data.username);
 
     if (existingUser) {
       res.status(401).json({ message: 'Käyttäjänimi on jo käytössä' });
