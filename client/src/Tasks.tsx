@@ -6,13 +6,15 @@ import { useAuth } from "./auth/useAuth";
 import { Severity, useNotification } from "./store/NotificationContext";
 import { Loading } from "./layout/Loading";
 import { Item } from '@putiikki/item'
+import { useGroup } from "./store/GroupContext";
 
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const Tasks = () => {
 
-  const { currentUser, setCurrentUser } = useAuth();
+  const { currentUser } = useAuth();
+  const { updateUserPoints, group } = useGroup();
   const { openNotification } = useNotification();
   const [tasks, setTasks] = useState([]);
   const [tasksLoading, setTasksLoading] = useState<boolean>(false);
@@ -21,13 +23,13 @@ export const Tasks = () => {
   const doTask = async (rewardPoints: number) => {
     if (currentUser !== null) {
       setPurchaseLoading(true);
-      await axios.post(`${API_URL}/transactions`, { username: currentUser.username, points: rewardPoints })
+
+      await updateUserPoints(rewardPoints)
         .then(response => {
           if (response.data === 'ok')
             openNotification({
               message: `Ansaitsit ${rewardPoints} pistettä!`, severity: Severity.Success
             })
-          setCurrentUser({ ...currentUser, points: currentUser.points + rewardPoints });
         })
         .catch(error => openNotification({ message: error.message, severity: Severity.Error }))
         .finally(() => setPurchaseLoading(false));
@@ -36,7 +38,7 @@ export const Tasks = () => {
 
   const fetchTasks = async () => {
     setTasksLoading(true);
-    await axios.get(`${API_URL}/tasks`)
+    await axios.get(`${API_URL}/groups/${group.uuid}/tasks`)
       .then(response =>
         setTasks(response.data)
       )
@@ -55,19 +57,21 @@ export const Tasks = () => {
       sx={{
         alignItems: "stretch",
       }}>
-      {tasks.length > 0 && tasks.map((task: Item, index: number) => {
-        return (
-          <Grid size={{ lg: 4, md: 4, xs: 4, sm: 8 }} key={`grid-${index}`}>
-            <ItemCard
-              item={task}
-              key={`task-${index}`}
-              handlePoints={(points: number) => doTask(points)}
-              buttonTitle='Tee'
-              isLoading={purchaseLoading}
-            />
-          </Grid>
-        )
-      })}
+      {tasks.length > 0
+        ? tasks.map((task: Item, index: number) => {
+          return (
+            <Grid size={{ lg: 4, md: 4, xs: 4, sm: 8 }} key={`grid-${index}`}>
+              <ItemCard
+                item={task}
+                key={`task-${index}`}
+                handlePoints={(points: number) => doTask(points)}
+                buttonTitle='Tee'
+                isLoading={purchaseLoading}
+              />
+            </Grid>
+          )
+        })
+        : <>Ei tehtäviä tällä hetkellä</>}
     </Grid>
   );
 }

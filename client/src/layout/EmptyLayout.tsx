@@ -1,14 +1,8 @@
 import { Box, Container, Typography } from "@mui/material";
-import { Navigate, Outlet } from "react-router";
+import { Outlet } from "react-router";
 import putiikkiLogo from './../assets/shop.svg';
-import { useAuth } from "../auth/useAuth";
 
 export const EmptyLayout = () => {
-
-  const { currentUser } = useAuth();
-  if (currentUser) {
-    return <Navigate to="/dashboard" />;
-  }
 
   return (
     <Container maxWidth="lg" sx={{ my: 4 }}>

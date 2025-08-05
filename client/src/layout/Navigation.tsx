@@ -20,22 +20,28 @@ import { Link as RouterLink } from "react-router";
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from "../auth/useAuth";
 import { AddItem } from "../components/AddItem";
+import { useGroup } from "../store/GroupContext";
 
+// TODO: Change var name
+const routesNormal = [
+  { to: '/dashboard', name: 'Koti' },
+  { to: '/shop', name: 'Kauppa' },
+];
 
-const routes = [
+const routesLeader = [
   { to: '/dashboard', name: 'Koti' },
   { to: '/tasks', name: 'Tehtävät' },
   { to: '/penalties', name: 'Rangaistukset' },
   { to: '/shop', name: 'Kauppa' },
   { to: '/add', name: 'Lisää uusi' }
-]
+];
 
 export const Navigation = () => {
   const { currentUser, logout } = useAuth();
+  const { userPoints, group } = useGroup();
 
-  if (!currentUser) {
-    return;
-  }
+  const routes = group.isLeader ? routesLeader : routesNormal;
+
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -64,7 +70,7 @@ export const Navigation = () => {
   const handleLogout = () => {
     logout();
   }
-  const currentPoints = currentUser.points ? currentUser.points : '0';
+  // const currentPoints = curren ? currentUser.points : '0';
 
   return (
     <AppBar variant="outlined" >
@@ -153,7 +159,7 @@ export const Navigation = () => {
                 alignSelf: 'center'
               }}
             >
-              {currentPoints} pistettä
+              {userPoints} pistettä
             </Typography>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -177,11 +183,14 @@ export const Navigation = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem>
-                <Typography variant='h5' fontFamily={'Lobster Two'}>Hei {currentUser.name}!</Typography>
+              <MenuItem sx={{ cursor: 'default' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <Typography variant='h5' fontFamily={'Lobster Two'}>Hei {currentUser.name}!</Typography>
+                  <Typography variant='body1'>Ryhmä: {group.name}</Typography>
+                </Box>
               </MenuItem>
               <MenuItem>
-                <Typography variant='body1'>Pistetilanne: {currentPoints}</Typography>
+                <Typography variant='body1'>Pistetilanne: {userPoints}</Typography>
               </MenuItem>
               <MenuItem>
                 <Button onClick={handleLogout}>Poistu</Button>

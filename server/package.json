@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx tsx --env-file=.test.env ./src/app.ts",
+    "dev": "npx tsx watch --env-file=.test.env ./src/app.ts",
     "prod": "npx tsx --env-file=.env ./src/app.ts"
   },
   "keywords": [],

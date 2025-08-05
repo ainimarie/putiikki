@@ -1,21 +1,26 @@
 import express from 'express';
 import { updatePoints } from '../services/users';
 import { z, ZodError } from 'zod';
+import { updateUserPoints } from 'src/services/groups';
 export const router = express.Router();
 
-const userSchema = z.object({
+const userGroupSchema = z.object({
   username: z.string(),
+  group: z.number().or(z.string()),
   points: z.number().nullable()
 });
 
 router.post('/', function (req, res, next) {
   try {
-    const user = userSchema.parse(req.body)
+    const user = userGroupSchema.parse(req.body)
 
     const username = user.username;
     const points = user.points;
+    const groupId = user.group;
 
-    updatePoints(username, points);
+    // updatePoints(username, points);
+    updateUserPoints(groupId, username, points)
+
 
     res.status(200).json('ok');
 
