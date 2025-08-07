@@ -45,7 +45,7 @@ export const Penalties = () => {
 
   useEffect(() => {
     fetchPenalties()
-  }, [])
+  }, [group])
 
   if (penaltiesLoading) return <Loading />
 

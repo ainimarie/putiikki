@@ -52,7 +52,7 @@ export const Shop = () => {
   }
   useEffect(() => {
     fetchRewards()
-  }, [])
+  }, [group])
 
   if (rewardsLoading) return <Loading />
 
