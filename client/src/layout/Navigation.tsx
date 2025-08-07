@@ -9,18 +9,15 @@ import {
   Button,
   Link,
   Typography,
-  Tooltip,
-  Avatar,
   Dialog,
-  DialogTitle
+  DialogTitle,
 } from "@mui/material";
-import { grey } from "@mui/material/colors";
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router";
 import MenuIcon from '@mui/icons-material/Menu';
-import { useAuth } from "../auth/useAuth";
 import { AddItem } from "../components/AddItem";
 import { useGroup } from "../store/GroupContext";
+import { ProfileMenu } from "../components/ProfileMenu";
 
 // TODO: Change var name
 const routesNormal = [
@@ -37,7 +34,6 @@ const routesLeader = [
 ];
 
 export const Navigation = () => {
-  const { currentUser, logout } = useAuth();
   const { userPoints, group } = useGroup();
 
   const routes = group.isLeader ? routesLeader : routesNormal;
@@ -67,10 +63,7 @@ export const Navigation = () => {
     setAnchorElUser(null);
   };
 
-  const handleLogout = () => {
-    logout();
-  }
-  // const currentPoints = curren ? currentUser.points : '0';
+
 
   return (
     <AppBar variant="outlined" >
@@ -161,41 +154,12 @@ export const Navigation = () => {
             >
               {userPoints} pistettä
             </Typography>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="user" src="/public/potted-plant.png" sx={{ bgcolor: grey.A100 }} />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              slotProps={{ paper: { sx: { width: '400px' } } }}
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem sx={{ cursor: 'default' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <Typography variant='h5' fontFamily={'Lobster Two'}>Hei {currentUser.name}!</Typography>
-                  <Typography variant='body1'>Ryhmä: {group.name}</Typography>
-                </Box>
-              </MenuItem>
-              <MenuItem>
-                <Typography variant='body1'>Pistetilanne: {userPoints}</Typography>
-              </MenuItem>
-              <MenuItem>
-                <Button onClick={handleLogout}>Poistu</Button>
-              </MenuItem>
-            </Menu>
+
+            <ProfileMenu
+              anchorElUser={anchorElUser}
+              handleOpenUserMenu={handleOpenUserMenu}
+              handleCloseUserMenu={handleCloseUserMenu}
+            />
           </Box>
         </Toolbar>
       </Container>

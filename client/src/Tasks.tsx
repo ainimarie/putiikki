@@ -47,7 +47,7 @@ export const Tasks = () => {
   }
   useEffect(() => {
     fetchTasks()
-  }, [])
+  }, [group])
 
   if (tasksLoading) return <Loading />
 
