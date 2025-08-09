@@ -20,11 +20,11 @@ export const Tasks = () => {
   const [tasksLoading, setTasksLoading] = useState<boolean>(false);
   const [purchaseLoading, setPurchaseLoading] = useState<boolean>(false);
 
-  const doTask = async (rewardPoints: number) => {
+  const doTask = async (rewardPoints: number, uuid: string) => {
     if (currentUser !== null) {
       setPurchaseLoading(true);
 
-      await updateUserPoints(rewardPoints)
+      await updateUserPoints(rewardPoints, 'task', uuid)
         .then(response => {
           if (response.data === 'ok')
             openNotification({
@@ -64,7 +64,7 @@ export const Tasks = () => {
               <ItemCard
                 item={task}
                 key={`task-${index}`}
-                handlePoints={(points: number) => doTask(points)}
+                handlePoints={(points: number) => doTask(points, task.uuid)}
                 buttonTitle='Tee'
                 isLoading={purchaseLoading}
               />

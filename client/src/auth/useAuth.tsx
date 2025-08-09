@@ -11,7 +11,7 @@ const initialUser: User = {
   name: '',
   username: '',
   points: 0,
-  group: null
+  groups: null
 }
 
 interface ProvideAuthContext {
@@ -57,9 +57,7 @@ export const AuthProvider = ({ children }: Props) => {
       .then(async () => {
         await axios.get(`${API_URL}/users/${username}`)
           .then(response => {
-            console.log(response.data)
             setCurrentUser(response.data);
-            console.log("navigate 2")
             navigate("/groups");
           })
       })

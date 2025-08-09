@@ -18,7 +18,7 @@ export const Shop = () => {
   const { updateUserPoints, userPoints, group } = useGroup();
   const { openNotification } = useNotification();
 
-  const buyReward = async (rewardPoints: number) => {
+  const buyReward = async (rewardPoints: number, uuid: string) => {
     setPurchaseLoading(true);
     if (currentUser !== null) {
       if (rewardPoints >= userPoints) {
@@ -28,7 +28,7 @@ export const Shop = () => {
         setPurchaseLoading(false);
         return;
       }
-      await updateUserPoints(-rewardPoints)
+      await updateUserPoints(-rewardPoints, 'reward', uuid)
         .then(response => {
           if (response.data === 'ok')
 
@@ -71,7 +71,7 @@ export const Shop = () => {
                 <ItemCard
                   item={reward}
                   key={`reward-${index}`}
-                  handlePoints={(points: number) => buyReward(points)}
+                  handlePoints={(points: number) => buyReward(points, reward.uuid)}
                   buttonTitle='Osta'
                   isLoading={purchaseLoading}
                 />

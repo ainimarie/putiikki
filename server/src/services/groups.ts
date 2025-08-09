@@ -1,7 +1,5 @@
-import { UserGroup } from '@putiikki/group';
 import { getMany, getOne, update } from './db';
-import { getUser, getUserId } from './users';
-// import { Group } from '@putiikki/group';
+import { getUserId } from './users';
 
 type GroupRequest = {
     username: string,
@@ -10,7 +8,7 @@ type GroupRequest = {
 }
 
 export async function addGroup(group: GroupRequest) {
-    const sql = `INSERT INTO groups (name, description) VALUES ($1, $2) RETURNING id`;
+    const sql = `INSERT INTO groups (name, description, uuid) VALUES ($1, $2, gen_random_uuid()) RETURNING id`;
     const updateResult = await update(sql, [group.name, group.description]);
 
     if (updateResult.rows.length === 0) {
@@ -32,16 +30,28 @@ export async function addGroup(group: GroupRequest) {
     }
 }
 
+export async function getGroupIdFromUuid(uuid: string): Promise<number> {
+    const query = await getOne('SELECT id FROM groups WHERE uuid = $1', [uuid]);
+    if (query === undefined) {
+        throw new Error('Group not found');
+    }
+    console.log("getGroupIdFromUuid", query)
+    const groupId = query.id;
+
+    return groupId;
+}
+
 export async function getGroupId(name: string): Promise<number> {
     const query = await getOne('SELECT id FROM groups WHERE name = LOWER($1)', [name]);
     if (query === undefined) {
         throw new Error('Group not found');
     }
-    const userId = query.id;
+    const groupId = query.id;
 
-    return userId;
+    return groupId;
 }
 
+//REDO with uuid
 export async function addMemberToGroup(groupName: string, username: string) {
     const userId = await getUserId(username);
 
@@ -50,7 +60,6 @@ export async function addMemberToGroup(groupName: string, username: string) {
     }
 
     const groupId = await getGroupId(groupName);
-    console.log("GROUPID: ", groupId)
     if (groupId === null || groupId === undefined) {
         throw new Error('Group not found');
     }
@@ -72,8 +81,8 @@ type MemberRow = {
     is_leader: boolean
 }
 
-export async function getGroupWithMembers(groupId: number) {
-    const query = await getMany('SELECT g.id, g.name, g.description, c.id AS member_id, c.username, c.name AS member_name, gm.points, gm.is_leader FROM groups g JOIN group_members gm ON g.id = gm.group_id JOIN customers c ON gm.customer_id = c.id WHERE g.id = $1', [groupId]);
+export async function getGroupWithMembers(groupId: string) {
+    const query = await getMany('SELECT g.id, g.name, g.description, g.uuid, c.id AS member_id, c.username, c.name AS member_name, gm.points, gm.is_leader FROM groups g JOIN group_members gm ON g.id = gm.group_id JOIN customers c ON gm.customer_id = c.id WHERE g.uuid = $1', [groupId]);
 
     if (!query || query.length === 0) {
         throw new Error('Group not found');
@@ -81,7 +90,7 @@ export async function getGroupWithMembers(groupId: number) {
 
     return {
         name: query[0].name,
-        uuid: query[0].id,
+        uuid: query[0].uuid,
         members: query.map((row: MemberRow) => ({
             username: row.username,
             name: row.member_name,
@@ -91,7 +100,8 @@ export async function getGroupWithMembers(groupId: number) {
     }
 }
 
-export async function getMemberWithinGroup(groupId: number, username: string) {
+export async function getMemberWithinGroup(uuid: string, username: string) {
+    const groupId = await getGroupIdFromUuid(uuid);
     const query = await getOne('SELECT c.id AS member_id, c.username, c.name AS member_name, gm.points, gm.is_leader FROM groups g JOIN group_members gm ON g.id = gm.group_id JOIN customers c ON gm.customer_id = c.id WHERE g.id = $1 and c.username = $2', [groupId, username]);
 
     if (!query) {
@@ -112,4 +122,4 @@ export async function updateUserPoints(groupId: number, username: string, points
         throw new Error('Failed to update user points');
     }
     return 'ok';
-}   
+}

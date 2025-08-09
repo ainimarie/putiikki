@@ -2,6 +2,7 @@ import { UserGroup } from '@putiikki/group';
 import React, { createContext, useState, ReactNode, useMemo, Dispatch, SetStateAction, useContext, use, useEffect } from 'react';
 import { useAuth } from '../auth/useAuth';
 import axios, { AxiosResponse } from 'axios';
+import { ItemType } from '@putiikki/item';
 
 interface GroupProviderProps {
   children: ReactNode;
@@ -14,7 +15,7 @@ const GroupContext = createContext<{
   group: UserGroup,
   setGroup: Dispatch<SetStateAction<UserGroup>>
   userPoints: number,
-  updateUserPoints: (points: number) => Promise<AxiosResponse>
+  updateUserPoints: (points: number, sourceType: ItemType, sourceId: string) => Promise<AxiosResponse>
 }>({
   group: initialGroup,
   setGroup: () => { },
@@ -27,16 +28,23 @@ export const GroupProvider: React.FC<GroupProviderProps> = ({ children }) => {
   const [userPoints, setUserPoints] = useState<number>(0);
   const { currentUser } = useAuth();
 
-  const updateUserPoints = async (rewardPoints: number): Promise<AxiosResponse> => {
+  const updateUserPoints = async (points: number, sourceType: ItemType, sourceId: string): Promise<AxiosResponse> => {
     if (!group.uuid || !currentUser.username) {
       // Return a dummy AxiosResponse if early return is needed
       return Promise.resolve({} as AxiosResponse);
     }
     try {
-      const response = await axios.post(`${API_URL}/transactions`, { username: currentUser.username, group: group.uuid, points: rewardPoints });
-      setUserPoints(prev => prev + rewardPoints);
+      const response = await axios.post(`${API_URL}/transactions`, {
+        username: currentUser.username,
+        group: group.uuid,
+        points,
+        sourceType,
+        sourceId
+      });
+      setUserPoints(prev => prev + points);
       return response;
     } catch (error) {
+      // Show error in UI
       console.error("Error updating user points:", error);
       // TODO:
       // Return a dummy AxiosResponse on error

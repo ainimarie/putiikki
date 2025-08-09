@@ -6,12 +6,12 @@ type UserRow = User & AuthData
 
 export async function getUser(username: string): Promise<User> {
   const userQuery: UserRow | undefined = await getOne('SELECT * FROM customers WHERE username = LOWER($1)', [username]);
-  const groupQuery = await getMany('SELECT g.name, gm.is_leader, g.id FROM groups g JOIN group_members gm ON g.id = gm.group_id WHERE gm.customer_id = (SELECT id FROM customers WHERE username = LOWER($1))', [username])
+  const groupQuery = await getMany('SELECT g.name, gm.is_leader, g.uuid FROM groups g JOIN group_members gm ON g.id = gm.group_id WHERE gm.customer_id = (SELECT id FROM customers WHERE username = LOWER($1))', [username])
 
   const groups = groupQuery.map((group) => ({
     name: group.name,
     isLeader: group.is_leader,
-    uuid: group.id.toString()
+    uuid: group.uuid
   }));
 
   if (userQuery !== undefined) {
@@ -49,7 +49,7 @@ export async function getUserWithPassword(user: AuthData): Promise<string> {
 }
 
 export async function addUser(user: AuthData & { name: string }): Promise<User> {
-  const sql = 'INSERT INTO customers (username, points, pword, name) VALUES ($1, 0, $2, $3)';
+  const sql = 'INSERT INTO customers (username, points, pword, name, uuid) VALUES ($1, 0, $2, $3, gen_random_uuid())';
   await update(sql, [user.username, user.password, user.name]);
   return;
 }
