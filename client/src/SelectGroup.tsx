@@ -37,9 +37,7 @@ export const SelectGroup: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const selectedGroup = userGroups?.find(group => group.uuid === selectGroup)
-    console.log("selectedGroup", selectedGroup)
     selectedGroup !== undefined && setGroup(selectedGroup)
-    console.log("asdasd", group, userPoints)
     navigate("/dashboard");
 
   }

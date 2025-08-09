@@ -59,7 +59,7 @@ router.put('/', async function (req, res, next) {
 
 router.get('/:id', async function (req, res, next) {
     try {
-        const groupId = parseInt(req.params.id);
+        const groupId = req.params.id;
         const group = await getGroupWithMembers(groupId);
         res.status(200).json(group);
     } catch (err) {
@@ -70,7 +70,7 @@ router.get('/:id', async function (req, res, next) {
 
 router.get('/:id/users', async function (req, res, next) {
     try {
-        const groupId = parseInt(req.params.id);
+        const groupId = req.params.id;
 
         const group = await getGroupWithMembers(groupId);
         res.status(200).json(group);
@@ -82,7 +82,7 @@ router.get('/:id/users', async function (req, res, next) {
 
 router.get('/:id/users/:username', async function (req, res, next) {
     try {
-        const groupId = parseInt(req.params.id);
+        const groupId = req.params.id;
         const username = req.params.username;
         const group = await getMemberWithinGroup(groupId, username);
         res.status(200).json(group);
@@ -95,7 +95,7 @@ router.get('/:id/users/:username', async function (req, res, next) {
 
 router.get('/:id/tasks', async function (req, res, next) {
     try {
-        const groupId = parseInt(req.params.id);
+        const groupId = req.params.id;
 
         const group = await getGroupTasks(groupId);
         res.status(200).json(group);
@@ -107,7 +107,7 @@ router.get('/:id/tasks', async function (req, res, next) {
 
 router.get('/:id/rewards', async function (req, res, next) {
     try {
-        const groupId = parseInt(req.params.id);
+        const groupId = req.params.id;
 
         const group = await getGroupRewards(groupId);
         res.status(200).json(group);
@@ -119,7 +119,7 @@ router.get('/:id/rewards', async function (req, res, next) {
 
 router.get('/:id/penalties', async function (req, res, next) {
     try {
-        const groupId = parseInt(req.params.id);
+        const groupId = req.params.id;
 
         const group = await getGroupPenalties(groupId);
         res.status(200).json(group);
@@ -139,7 +139,7 @@ router.post('/:id/tasks', function (req, res, next) {
             description: taskToBeAdded.description || null
         }
 
-        addTask(task, parseInt(req.params.id));
+        addTask(task, req.params.id);
         res.status(200).json('ok');
     } catch (err) {
         console.error(`Error while adding task `, err.message);
@@ -157,7 +157,7 @@ router.post('/:id/rewards', function (req, res, next) {
             description: rewardToBeAdded.description || null
         }
 
-        addReward(task, parseInt(req.params.id));
+        addReward(task, req.params.id);
         res.status(200).json('ok');
     } catch (err) {
         console.error(`Error while adding task `, err.message);
@@ -175,7 +175,7 @@ router.post('/:id/penalties', function (req, res, next) {
             description: penaltyToBeAdded.description || null
         }
 
-        addPenalty(task, parseInt(req.params.id));
+        addPenalty(task, req.params.id);
         res.status(200).json('ok');
     } catch (err) {
         console.error(`Error while adding task `, err.message);

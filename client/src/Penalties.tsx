@@ -19,10 +19,10 @@ export const Penalties = () => {
   const { currentUser } = useAuth();
   const { updateUserPoints, group } = useGroup();
 
-  const getPenalty = async (penaltyPoints: number) => {
+  const getPenalty = async (penaltyPoints: number, uuid: string) => {
     if (currentUser !== null) {
       setPurchaseLoading(true);
-      await updateUserPoints(-penaltyPoints)
+      await updateUserPoints(-penaltyPoints, 'penalty', uuid)
         .then(response => {
           if (response.data === 'ok')
             openNotification({ message: `Menetit ${penaltyPoints} pistettä!`, severity: Severity.Error })
@@ -62,7 +62,7 @@ export const Penalties = () => {
               <ItemCard
                 item={penalty}
                 key={`reward-${index}`}
-                handlePoints={(points: number) => getPenalty(points)}
+                handlePoints={(points: number) => getPenalty(points, penalty.uuid)}
                 buttonTitle='Vähennä'
                 isLoading={purchaseLoading}
                 isPenalty

@@ -4,7 +4,6 @@ import { compare } from 'bcryptjs';
 const KEY = process.env.JWT_SECRET || 'secret';
 
 export function createJWT(username: string) {
-  console.log(username)
   return sign({ username }, KEY, { expiresIn: '5h' });
 }
 
